@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from "react";
 import {
-	IconX,
-	IconUser,
-	IconClipboard,
-	IconArrowLeft,
-	IconSend,
-	IconSparkles,
-	IconCheck,
-} from "@/components/icons/Icons";
+	IoCloseOutline,
+	IoPersonOutline,
+	IoClipboardOutline,
+	IoArrowBackOutline,
+	IoSendOutline,
+	IoSparklesOutline,
+	IoCheckmarkOutline,
+} from "react-icons/io5";
 import FeedbackStory from "@/components/feedback/FeedbackStory";
 import { users, currentUser, projectTasks } from "@/lib/mock-data";
 import { User } from "@/lib/types";
@@ -18,14 +18,16 @@ interface SidePanelProps {
 	isOpen: boolean;
 	onClose: () => void;
 	lockedTarget?: User | null;
-	onDailyComplete?: () => void;
+	onDailyComplete?: (completedUser?: User | null) => void;
 	mode?: "send" | "request";
+	weeklyTargets?: User[];
 }
 
 type PanelView =
 	| "select"
 	| "personal"
 	| "pick-person"
+	| "weekly-pick"
 	| "project"
 	| "req-type"
 	| "req-pick-person"
@@ -36,38 +38,38 @@ type PanelView =
 
 const aiSuggestions: Record<string, string> = {
 	vague:
-		"Il tuo feedback sembra generico. Prova a specificare un esempio concreto per renderlo più utile.",
+		"Your feedback seems generic. Try to specify a concrete example to make it more useful.",
 	negative:
-		"Il tono del feedback potrebbe risultare negativo. Prova a riformularlo in chiave costruttiva, suggerendo un'alternativa.",
+		"The tone of the feedback might sound negative. Try to rephrase it constructively, suggesting an alternative.",
 	short:
-		"Il feedback è molto breve. Aggiungere contesto aiuterebbe il destinatario a capire meglio il tuo punto di vista.",
+		"The feedback is very short. Adding context would help the recipient better understand your point of view.",
 	good: "",
 };
 
 function analyzeComment(text: string): string {
 	if (text.length < 20 && text.length > 0) return aiSuggestions.short;
 	const negativeWords = [
-		"male",
-		"sbagliato",
-		"non funziona",
-		"brutto",
-		"pessimo",
-		"orribile",
+		"bad",
+		"wrong",
+		"doesn't work",
+		"ugly",
+		"terrible",
+		"horrible",
 	];
 	if (negativeWords.some((w) => text.toLowerCase().includes(w)))
 		return aiSuggestions.negative;
-	const vagueWords = ["ok", "bene", "carino", "nice", "va bene"];
+	const vagueWords = ["ok", "good", "nice", "fine"];
 	if (vagueWords.some((w) => text.toLowerCase().trim() === w))
 		return aiSuggestions.vague;
 	return aiSuggestions.good;
 }
 
 const personalAreas = [
-	{ id: "partecipazione", emoji: "🙋", label: "Partecipazione" },
-	{ id: "comunicazione", emoji: "💬", label: "Comunicazione" },
-	{ id: "collaborazione", emoji: "🤝", label: "Collaborazione" },
+	{ id: "partecipazione", emoji: "🙋", label: "Participation" },
+	{ id: "comunicazione", emoji: "💬", label: "Communication" },
+	{ id: "collaborazione", emoji: "🤝", label: "Collaboration" },
 	{ id: "leadership", emoji: "🎯", label: "Leadership" },
-	{ id: "proattivita", emoji: "⚡", label: "Proattività" },
+	{ id: "proattivita", emoji: "⚡", label: "Proactivity" },
 	{ id: "problem-solving", emoji: "🧠", label: "Problem Solving" },
 ];
 
@@ -77,18 +79,21 @@ export default function SidePanel({
 	lockedTarget,
 	onDailyComplete,
 	mode = "send",
+	weeklyTargets,
 }: SidePanelProps) {
 	const [view, setView] = useState<PanelView>("select");
 
 	useEffect(() => {
 		if (isOpen && lockedTarget) {
 			setView("personal");
+		} else if (isOpen && weeklyTargets && weeklyTargets.length > 0) {
+			setView("weekly-pick");
 		} else if (isOpen && mode === "request") {
 			setView("req-type");
 		} else if (isOpen) {
 			setView("select");
 		}
-	}, [isOpen, lockedTarget, mode]);
+	}, [isOpen, lockedTarget, mode, weeklyTargets]);
 
 	const [projectComment, setProjectComment] = useState("");
 	const [selectedTaskId, setSelectedTaskId] = useState(
@@ -127,15 +132,33 @@ export default function SidePanel({
 	};
 
 	const handleFeedbackCompleted = () => {
+		const completedPerson = selectedPerson;
 		resetState();
 		if (lockedTarget && onDailyComplete) {
-			onDailyComplete();
+			onDailyComplete(lockedTarget);
+		} else if (
+			weeklyTargets &&
+			weeklyTargets.length > 0 &&
+			completedPerson &&
+			onDailyComplete
+		) {
+			onDailyComplete(completedPerson);
 		} else {
 			onClose();
 		}
 	};
 
 	const handleBack = () => {
+		// Weekly flow back navigation
+		if (
+			view === "personal" &&
+			weeklyTargets &&
+			weeklyTargets.length > 0 &&
+			!lockedTarget
+		) {
+			setView("weekly-pick");
+			return;
+		}
 		// Send flow back navigation
 		if (view === "personal" && !lockedTarget) {
 			setView("pick-person");
@@ -180,23 +203,25 @@ export default function SidePanel({
 	const getTitle = () => {
 		switch (view) {
 			case "select":
-				return "Invia Feedback";
+				return "Send Feedback";
 			case "pick-person":
-				return "Scegli Destinatario";
+				return "Choose Recipient";
+			case "weekly-pick":
+				return "Weekly Feedback";
 			case "personal":
-				return "Feedback Personale";
+				return "Personal Feedback";
 			case "project":
-				return "Feedback Progettuale";
+				return "Project Feedback";
 			case "req-type":
-				return "Richiedi Feedback";
+				return "Request Feedback";
 			case "req-pick-person":
-				return "Scegli Persona";
+				return "Choose Person";
 			case "req-personal-area":
-				return "Area di Feedback";
+				return "Feedback Area";
 			case "req-project-task":
-				return "Seleziona Task";
+				return "Select Task";
 			case "req-sent":
-				return "Richiesta Inviata";
+				return "Request Sent";
 			default:
 				return "";
 		}
@@ -215,14 +240,16 @@ export default function SidePanel({
 				{/* Header */}
 				<div className="flex items-center justify-between border-b border-border px-6 py-4">
 					<div className="flex items-center gap-3">
-						{view !== "select" && view !== "req-type" && (
-							<button
-								onClick={handleBack}
-								className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-gray-100 text-muted transition-colors"
-							>
-								<IconArrowLeft className="w-4 h-4" />
-							</button>
-						)}
+						{view !== "select" &&
+							view !== "req-type" &&
+							view !== "weekly-pick" && (
+								<button
+									onClick={handleBack}
+									className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-gray-100 text-muted transition-colors"
+								>
+									<IoArrowBackOutline className="w-5 h-5 text-sky-800" />
+								</button>
+							)}
 						<h3 className="text-base font-semibold text-foreground">
 							{getTitle()}
 						</h3>
@@ -231,7 +258,7 @@ export default function SidePanel({
 						onClick={handleClose}
 						className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-gray-100 text-muted transition-colors"
 					>
-						<IconX className="w-4 h-4" />
+						<IoCloseOutline className="w-5 h-5 text-sky-800" />
 					</button>
 				</div>
 
@@ -241,7 +268,7 @@ export default function SidePanel({
 					{view === "select" && (
 						<div className="space-y-3 animate-fade-in-up">
 							<p className="text-sm text-muted mb-4">
-								Che tipo di feedback vuoi inviare?
+								What kind of feedback do you want to send?
 							</p>
 							<button
 								onClick={() => {
@@ -250,15 +277,15 @@ export default function SidePanel({
 								}}
 								className="flex w-full items-center gap-4 rounded-2xl border-2 border-border bg-white p-5 text-left hover:border-sky-200 hover:bg-sky-50/50 transition-all group"
 							>
-								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-light text-accent group-hover:bg-accent group-hover:text-white transition-colors">
-									<IconUser className="w-6 h-6" />
+								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 text-sky-800 group-hover:bg-sky-800 group-hover:text-white transition-colors">
+									<IoPersonOutline className="w-6 h-6" />
 								</div>
 								<div>
 									<p className="text-sm font-semibold text-foreground">
-										Feedback Personale
+										Personal Feedback
 									</p>
 									<p className="text-xs text-muted mt-0.5">
-										Invia una valutazione personale a un collega
+										Send a personal evaluation to a colleague
 									</p>
 								</div>
 							</button>
@@ -266,18 +293,47 @@ export default function SidePanel({
 								onClick={() => setView("project")}
 								className="flex w-full items-center gap-4 rounded-2xl border-2 border-border bg-white p-5 text-left hover:border-sky-200 hover:bg-sky-50/50 transition-all group"
 							>
-								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-light text-accent group-hover:bg-accent group-hover:text-white transition-colors">
-									<IconClipboard className="w-6 h-6" />
+								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 text-sky-800 group-hover:bg-sky-800 group-hover:text-white transition-colors">
+									<IoClipboardOutline className="w-6 h-6" />
 								</div>
 								<div>
 									<p className="text-sm font-semibold text-foreground">
-										Feedback Progettuale
+										Project Feedback
 									</p>
 									<p className="text-xs text-muted mt-0.5">
-										Lascia un commento su un task del progetto
+										Leave a comment on a project task
 									</p>
 								</div>
 							</button>
+						</div>
+					)}
+
+					{/* ═══ WEEKLY: Pick from assigned targets ═══ */}
+					{view === "weekly-pick" && weeklyTargets && (
+						<div className="space-y-3 animate-fade-in-up">
+							<p className="text-sm text-muted mb-2">
+								Who do you want to send the weekly feedback to?
+							</p>
+							{weeklyTargets.map((user) => (
+								<button
+									key={user.id}
+									onClick={() => {
+										setSelectedPerson(user);
+										setView("personal");
+									}}
+									className="flex w-full items-center gap-3 rounded-xl border border-border bg-white p-4 text-left hover:border-sky-200 hover:bg-sky-50/50 transition-all"
+								>
+									<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sky-100 text-sky-800 text-sm font-semibold">
+										{user.avatar}
+									</div>
+									<div>
+										<p className="text-sm font-semibold text-foreground">
+											{user.name}
+										</p>
+										<p className="text-xs text-muted">{user.role}</p>
+									</div>
+								</button>
+							))}
 						</div>
 					)}
 
@@ -285,7 +341,7 @@ export default function SidePanel({
 					{view === "pick-person" && (
 						<div className="space-y-3 animate-fade-in-up">
 							<p className="text-sm text-muted mb-2">
-								A chi vuoi inviare il feedback?
+								Who do you want to send the feedback to?
 							</p>
 							{users
 								.filter((u) => u.id !== currentUser.id)
@@ -298,7 +354,7 @@ export default function SidePanel({
 										}}
 										className="flex w-full items-center gap-3 rounded-xl border border-border bg-white p-4 text-left hover:border-sky-200 hover:bg-sky-50/50 transition-all"
 									>
-										<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-light text-accent text-sm font-semibold">
+										<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sky-100 text-sky-800 text-sm font-semibold">
 											{user.avatar}
 										</div>
 										<div>
@@ -330,7 +386,7 @@ export default function SidePanel({
 								<select
 									value={selectedTaskId}
 									onChange={(e) => setSelectedTaskId(e.target.value)}
-									className="w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm text-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/10"
+									className="w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm text-foreground focus:border-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-800/10"
 								>
 									{projectTasks.map((t) => (
 										<option key={t.id} value={t.id}>
@@ -341,24 +397,24 @@ export default function SidePanel({
 							</div>
 							<div>
 								<label className="text-sm font-medium text-foreground mb-1.5 block">
-									Il tuo feedback
+									Your feedback
 								</label>
 								<textarea
 									value={projectComment}
 									onChange={(e) => setProjectComment(e.target.value)}
-									placeholder="Scrivi il tuo feedback sul task... Sii specifico e costruttivo."
+									placeholder="Write your feedback on the task... Be specific and constructive."
 									rows={5}
-									className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-gray-400 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/10 resize-none"
+									className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-gray-400 focus:border-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-800/10 resize-none"
 								/>
 							</div>
 							{aiHint && (
 								<div className="flex gap-3 rounded-xl bg-gradient-to-r from-sky-50 to-indigo-50 border border-sky-200 p-4 animate-fade-in-up">
-									<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
-										<IconSparkles className="w-4 h-4" />
+									<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-sky-800/10 text-sky-800">
+										<IoSparklesOutline className="w-5 h-5 animate-scale-in" />
 									</div>
 									<div>
-										<p className="text-xs font-semibold text-accent mb-1">
-											Suggerimento AI
+										<p className="text-xs font-semibold text-sky-800 mb-1">
+											AI Suggestion
 										</p>
 										<p className="text-sm text-foreground/80 leading-relaxed">
 											{aiHint}
@@ -369,10 +425,10 @@ export default function SidePanel({
 							<button
 								onClick={handleSendProjectComment}
 								disabled={projectComment.trim().length < 5}
-								className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-5 py-3 text-sm font-medium text-white hover:bg-sky-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+								className="flex w-full items-center justify-center gap-2 rounded-xl bg-sky-800 px-5 py-3 text-sm font-medium text-white hover:bg-sky-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
 							>
-								<IconSend className="w-4 h-4" />
-								Invia Commento
+								<IoSendOutline className="w-4 h-4" />
+								Send Comment
 							</button>
 						</div>
 					)}
@@ -381,13 +437,13 @@ export default function SidePanel({
 					{view === "project" && commentSent && (
 						<div className="flex flex-col items-center justify-center py-16 animate-scale-in">
 							<div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-4">
-								<IconCheck className="w-8 h-8" />
+								<IoCheckmarkOutline className="w-8 h-8" />
 							</div>
 							<h3 className="text-lg font-semibold text-foreground mb-1">
-								Commento Inviato!
+								Comment Sent!
 							</h3>
 							<p className="text-sm text-muted">
-								Il tuo feedback è stato aggiunto al task
+								Your feedback has been added to the task
 							</p>
 						</div>
 					)}
@@ -400,7 +456,7 @@ export default function SidePanel({
 					{view === "req-type" && (
 						<div className="space-y-3 animate-fade-in-up">
 							<p className="text-sm text-muted mb-4">
-								Che tipo di feedback vuoi richiedere?
+								What kind of feedback do you want to request?
 							</p>
 							<button
 								onClick={() => {
@@ -410,14 +466,14 @@ export default function SidePanel({
 								className="flex w-full items-center gap-4 rounded-2xl border-2 border-border bg-white p-5 text-left hover:border-violet-200 hover:bg-violet-50/50 transition-all group"
 							>
 								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100 text-violet-600 group-hover:bg-violet-600 group-hover:text-white transition-colors">
-									<IconUser className="w-6 h-6" />
+									<IoPersonOutline className="w-6 h-6" />
 								</div>
 								<div>
 									<p className="text-sm font-semibold text-foreground">
-										Feedback Personale
+										Personal Feedback
 									</p>
 									<p className="text-xs text-muted mt-0.5">
-										Chiedi un feedback su un tuo aspetto personale
+										Ask for feedback on a personal aspect
 									</p>
 								</div>
 							</button>
@@ -429,14 +485,14 @@ export default function SidePanel({
 								className="flex w-full items-center gap-4 rounded-2xl border-2 border-border bg-white p-5 text-left hover:border-violet-200 hover:bg-violet-50/50 transition-all group"
 							>
 								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100 text-violet-600 group-hover:bg-violet-600 group-hover:text-white transition-colors">
-									<IconClipboard className="w-6 h-6" />
+									<IoClipboardOutline className="w-6 h-6" />
 								</div>
 								<div>
 									<p className="text-sm font-semibold text-foreground">
-										Feedback Progettuale
+										Project Feedback
 									</p>
 									<p className="text-xs text-muted mt-0.5">
-										Chiedi un feedback su un task specifico
+										Ask for feedback on a specific task
 									</p>
 								</div>
 							</button>
@@ -447,7 +503,7 @@ export default function SidePanel({
 					{view === "req-pick-person" && (
 						<div className="space-y-3 animate-fade-in-up">
 							<p className="text-sm text-muted mb-2">
-								Da chi vuoi ricevere il feedback?
+								Who do you want to receive feedback from?
 							</p>
 							{users
 								.filter((u) => u.id !== currentUser.id)
@@ -482,7 +538,7 @@ export default function SidePanel({
 					{view === "req-personal-area" && (
 						<div className="space-y-4 animate-fade-in-up">
 							<p className="text-sm text-muted mb-2">
-								Su quale area vuoi ricevere feedback da{" "}
+								What area do you want to receive feedback on from{" "}
 								<span className="font-medium text-foreground">
 									{selectedPerson?.name}
 								</span>
@@ -511,7 +567,7 @@ export default function SidePanel({
 								disabled={!reqSelectedArea}
 								className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-medium text-white hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all mt-4"
 							>
-								Avanti
+								Next
 							</button>
 						</div>
 					)}
@@ -520,7 +576,7 @@ export default function SidePanel({
 					{view === "req-project-task" && (
 						<div className="space-y-4 animate-fade-in-up">
 							<p className="text-sm text-muted mb-2">
-								Su quale task vuoi ricevere feedback da{" "}
+								What task do you want to receive feedback on from{" "}
 								<span className="font-medium text-foreground">
 									{selectedPerson?.name}
 								</span>
@@ -538,7 +594,7 @@ export default function SidePanel({
 										}`}
 									>
 										<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-100 text-violet-600">
-											<IconClipboard className="w-4 h-4" />
+											<IoClipboardOutline className="w-4 h-4" />
 										</div>
 										<div>
 											<p className="text-sm font-medium text-foreground">
@@ -556,7 +612,7 @@ export default function SidePanel({
 								disabled={!reqSelectedTask}
 								className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-medium text-white hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all mt-2"
 							>
-								Avanti
+								Next
 							</button>
 						</div>
 					)}
@@ -567,13 +623,13 @@ export default function SidePanel({
 							{/* Notes */}
 							<div>
 								<label className="text-sm font-medium text-foreground mb-1.5 block">
-									Note aggiuntive{" "}
-									<span className="text-muted font-normal">(opzionale)</span>
+									Additional notes{" "}
+									<span className="text-muted font-normal">(optional)</span>
 								</label>
 								<textarea
 									value={reqNotes}
 									onChange={(e) => setReqNotes(e.target.value)}
-									placeholder="Es: Mi piacerebbe avere un parere sull'usabilità del flusso di checkout..."
+									placeholder="E.g.: I would like to get an opinion on the usability of the checkout flow..."
 									rows={3}
 									className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-gray-400 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-400/10 resize-none"
 								/>
@@ -582,7 +638,7 @@ export default function SidePanel({
 							{/* Attachments */}
 							<div>
 								<label className="text-sm font-medium text-foreground mb-2 block">
-									Allegati
+									Attachments
 								</label>
 								{reqAttachments.length > 0 && (
 									<div className="flex flex-wrap gap-2 mb-3">
@@ -624,7 +680,7 @@ export default function SidePanel({
 										className="flex items-center gap-2 rounded-xl border-2 border-dashed border-border bg-white px-4 py-3 text-sm text-muted hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50/50 transition-all flex-1"
 									>
 										<span className="text-lg">📷</span>
-										Immagini
+										Images
 									</button>
 									<button
 										onClick={() => {
@@ -642,7 +698,7 @@ export default function SidePanel({
 										className="flex items-center gap-2 rounded-xl border-2 border-dashed border-border bg-white px-4 py-3 text-sm text-muted hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50/50 transition-all flex-1"
 									>
 										<span className="text-lg">📄</span>
-										Documenti
+										Documents
 									</button>
 								</div>
 							</div>
@@ -650,7 +706,7 @@ export default function SidePanel({
 							{/* Integrations */}
 							<div>
 								<label className="text-sm font-medium text-foreground mb-2 block">
-									Integrazioni
+									Integrations
 								</label>
 								<button
 									onClick={() => setReqFigmaLinked(!reqFigmaLinked)}
@@ -688,13 +744,13 @@ export default function SidePanel({
 										<p className="text-sm font-medium text-foreground">Figma</p>
 										<p className="text-xs text-muted">
 											{reqFigmaLinked
-												? "Progetto collegato ✓"
-												: "Collega un file Figma alla richiesta"}
+												? "Project linked ✓"
+												: "Link a Figma file to the request"}
 										</p>
 									</div>
 									{reqFigmaLinked && (
 										<span className="text-xs font-medium text-violet-600 bg-violet-100 px-2 py-1 rounded-lg">
-											Collegato
+											Linked
 										</span>
 									)}
 								</button>
@@ -705,8 +761,8 @@ export default function SidePanel({
 								onClick={handleSendRequest}
 								className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-medium text-white hover:bg-violet-700 transition-all mt-2"
 							>
-								<IconSend className="w-4 h-4" />
-								Invia Richiesta
+								<IoSendOutline className="w-4 h-4" />
+								Send Request
 							</button>
 						</div>
 					)}
@@ -715,13 +771,13 @@ export default function SidePanel({
 					{view === "req-sent" && (
 						<div className="flex flex-col items-center justify-center py-16 animate-scale-in">
 							<div className="flex h-16 w-16 items-center justify-center rounded-full bg-violet-100 text-violet-600 mb-4">
-								<IconCheck className="w-8 h-8" />
+								<IoCheckmarkOutline className="w-8 h-8" />
 							</div>
 							<h3 className="text-lg font-semibold text-foreground mb-1">
-								Richiesta Inviata!
+								Request Sent!
 							</h3>
 							<p className="text-sm text-muted text-center">
-								{selectedPerson?.name} riceverà la tua richiesta di feedback
+								{selectedPerson?.name} will receive your feedback request
 							</p>
 						</div>
 					)}

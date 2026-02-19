@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { User, ReactionEmoji } from "@/lib/types";
-import { IconSend, IconCheck } from "@/components/icons/Icons";
+import { IoSendOutline, IoCheckmarkOutline } from "react-icons/io5";
 
 interface FeedbackStoryProps {
 	targetUser: User;
@@ -11,11 +11,11 @@ interface FeedbackStoryProps {
 
 const reactions: { emoji: ReactionEmoji; label: string }[] = [
 	{ emoji: "🔥", label: "On Fire" },
-	{ emoji: "💪", label: "Forte" },
-	{ emoji: "🌟", label: "Stellare" },
+	{ emoji: "💪", label: "Strong" },
+	{ emoji: "🌟", label: "Stellar" },
 	{ emoji: "🤝", label: "Team Player" },
-	{ emoji: "💡", label: "Creativo" },
-	{ emoji: "❤️", label: "Empatico" },
+	{ emoji: "💡", label: "Creative" },
+	{ emoji: "❤️", label: "Empathetic" },
 ];
 
 interface Trait {
@@ -26,30 +26,30 @@ interface Trait {
 }
 
 const strengths: Trait[] = [
-	{ id: "s1", emoji: "🎯", label: "Precisione", type: "strength" },
-	{ id: "s2", emoji: "🤝", label: "Collaborazione", type: "strength" },
-	{ id: "s3", emoji: "💬", label: "Comunicazione", type: "strength" },
-	{ id: "s4", emoji: "⚡", label: "Proattività", type: "strength" },
+	{ id: "s1", emoji: "🎯", label: "Precision", type: "strength" },
+	{ id: "s2", emoji: "🤝", label: "Collaboration", type: "strength" },
+	{ id: "s3", emoji: "💬", label: "Communication", type: "strength" },
+	{ id: "s4", emoji: "⚡", label: "Proactivity", type: "strength" },
 	{ id: "s5", emoji: "🧠", label: "Problem Solving", type: "strength" },
-	{ id: "s6", emoji: "📋", label: "Organizzazione", type: "strength" },
-	{ id: "s7", emoji: "🎨", label: "Creatività", type: "strength" },
-	{ id: "s8", emoji: "🔥", label: "Motivazione", type: "strength" },
+	{ id: "s6", emoji: "📋", label: "Organization", type: "strength" },
+	{ id: "s7", emoji: "🎨", label: "Creativity", type: "strength" },
+	{ id: "s8", emoji: "🔥", label: "Motivation", type: "strength" },
 ];
 
 const improvements: Trait[] = [
-	{ id: "i1", emoji: "⏰", label: "Puntualità", type: "improvement" },
-	{ id: "i2", emoji: "📢", label: "Comunicazione", type: "improvement" },
-	{ id: "i3", emoji: "📝", label: "Documentazione", type: "improvement" },
+	{ id: "i1", emoji: "⏰", label: "Punctuality", type: "improvement" },
+	{ id: "i2", emoji: "📢", label: "Communication", type: "improvement" },
+	{ id: "i3", emoji: "📝", label: "Documentation", type: "improvement" },
 	{
 		id: "i4",
 		emoji: "🔍",
-		label: "Attenzione ai dettagli",
+		label: "Attention to Detail",
 		type: "improvement",
 	},
-	{ id: "i5", emoji: "🤲", label: "Delega", type: "improvement" },
-	{ id: "i6", emoji: "🎯", label: "Prioritizzazione", type: "improvement" },
-	{ id: "i7", emoji: "🧘", label: "Gestione stress", type: "improvement" },
-	{ id: "i8", emoji: "👂", label: "Ascolto attivo", type: "improvement" },
+	{ id: "i5", emoji: "🤲", label: "Delegation", type: "improvement" },
+	{ id: "i6", emoji: "🎯", label: "Prioritization", type: "improvement" },
+	{ id: "i7", emoji: "🧘", label: "Stress Management", type: "improvement" },
+	{ id: "i8", emoji: "👂", label: "Active Listening", type: "improvement" },
 ];
 
 export default function FeedbackStory({
@@ -98,13 +98,13 @@ export default function FeedbackStory({
 		return (
 			<div className="flex flex-col items-center justify-center py-16 animate-scale-in">
 				<div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-4">
-					<IconCheck className="w-8 h-8" />
+					<IoCheckmarkOutline className="w-8 h-8" />
 				</div>
 				<h3 className="text-lg font-semibold text-foreground mb-1">
-					Feedback Inviato!
+					Feedback Sent!
 				</h3>
 				<p className="text-sm text-muted">
-					Il tuo feedback per {targetUser.name} è stato inviato
+					Your feedback for {targetUser.name} has been sent
 				</p>
 			</div>
 		);
@@ -114,7 +114,7 @@ export default function FeedbackStory({
 		<div className="flex flex-col h-full">
 			{/* Target user header */}
 			<div className="flex items-center gap-3 mb-6 pb-4 border-b border-border">
-				<div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-light text-accent text-sm font-bold">
+				<div className="flex h-12 w-12 items-center justify-center rounded-full bg-sky-100 text-sky-800 text-sm font-bold">
 					{targetUser.avatar}
 				</div>
 				<div>
@@ -132,9 +132,9 @@ export default function FeedbackStory({
 						key={i}
 						className={`h-1.5 rounded-full transition-all duration-300 ${
 							i === currentStep
-								? "w-8 bg-accent"
+								? "w-8 bg-sky-800"
 								: i < currentStep
-									? "w-4 bg-accent/40"
+									? "w-4 bg-sky-800/40"
 									: "w-4 bg-gray-200"
 						}`}
 					/>
@@ -147,10 +147,10 @@ export default function FeedbackStory({
 				{currentStep === 0 && (
 					<div>
 						<h3 className="text-base font-semibold text-foreground mb-1">
-							Come descriveresti {targetUser.name}?
+							How would you describe {targetUser.name}?
 						</h3>
 						<p className="text-sm text-muted mb-6">
-							Scegli la reazione che meglio rappresenta la tua impressione
+							Choose the reaction that best represents your impression
 						</p>
 
 						<div className="grid grid-cols-3 gap-3">
@@ -160,7 +160,7 @@ export default function FeedbackStory({
 									onClick={() => setSelectedReaction(r.emoji)}
 									className={`flex flex-col items-center gap-2 rounded-2xl border-2 p-4 transition-all hover:border-sky-200 hover:bg-sky-50 ${
 										selectedReaction === r.emoji
-											? "border-accent bg-accent-light shadow-sm"
+											? "border-sky-800 bg-sky-100 shadow-sm"
 											: "border-border bg-white"
 									}`}
 								>
@@ -178,10 +178,10 @@ export default function FeedbackStory({
 				{currentStep === 1 && (
 					<div>
 						<h3 className="text-base font-semibold text-foreground mb-1">
-							Punti di forza
+							Strengths
 						</h3>
 						<p className="text-sm text-muted mb-4">
-							In cosa eccelle? Seleziona uno o più
+							What do they excel at? Select one or more
 						</p>
 
 						<div className="grid grid-cols-2 gap-2 mb-6">
@@ -206,10 +206,10 @@ export default function FeedbackStory({
 						</div>
 
 						<h3 className="text-base font-semibold text-foreground mb-1">
-							Aree di miglioramento
+							Areas for improvement
 						</h3>
 						<p className="text-sm text-muted mb-4">
-							Dove potrebbe crescere? (opzionale)
+							Where could they grow? (optional)
 						</p>
 
 						<div className="grid grid-cols-2 gap-2">
@@ -243,10 +243,10 @@ export default function FeedbackStory({
 				{currentStep === 2 && (
 					<div>
 						<h3 className="text-base font-semibold text-foreground mb-1">
-							Vuoi aggiungere una motivazione?
+							Do you want to add a motivation?
 						</h3>
 						<p className="text-sm text-muted mb-6">
-							Spiega il perché delle tue scelte (opzionale)
+							Explain the reason for your choices (optional)
 						</p>
 
 						{/* Summary of selections */}
@@ -286,12 +286,12 @@ export default function FeedbackStory({
 						<textarea
 							value={message}
 							onChange={(e) => setMessage(e.target.value)}
-							placeholder="Es: Ho notato che durante le standup comunica sempre in modo chiaro e sintetico..."
+							placeholder="E.g.: I noticed that during standups they always communicate clearly and concisely..."
 							rows={4}
-							className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-gray-400 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/10 resize-none"
+							className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-gray-400 focus:border-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-800/10 resize-none"
 						/>
 						<p className="text-[11px] text-muted mt-2">
-							{message.length}/300 caratteri
+							{message.length}/300 characters
 						</p>
 					</div>
 				)}
@@ -305,25 +305,25 @@ export default function FeedbackStory({
 						currentStep === 0 ? "invisible" : ""
 					}`}
 				>
-					Indietro
+					Back
 				</button>
 
 				{currentStep < totalSteps - 1 ? (
 					<button
 						onClick={() => setCurrentStep(currentStep + 1)}
 						disabled={!canProceed()}
-						className="flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-medium text-white hover:bg-sky-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+						className="flex items-center gap-2 rounded-xl bg-sky-800 px-5 py-2.5 text-sm font-medium text-white hover:bg-sky-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
 					>
-						Avanti
+						Next
 					</button>
 				) : (
 					<button
 						onClick={handleSend}
 						disabled={!canProceed()}
-						className="flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-medium text-white hover:bg-sky-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+						className="flex items-center gap-2 rounded-xl bg-sky-800 px-5 py-2.5 text-sm font-medium text-white hover:bg-sky-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
 					>
-						<IconSend className="w-4 h-4" />
-						Invia Feedback
+						<IoSendOutline className="w-4 h-4" />
+						Send Feedback
 					</button>
 				)}
 			</div>

@@ -13,11 +13,20 @@ export function getRandomPerson(users: User[], currentUserId: string): User {
  */
 export function formatDate(iso: string): string {
 	const d = new Date(iso);
-	return d.toLocaleDateString("it-IT", {
-		day: "numeric",
-		month: "short",
-		year: "numeric",
-	});
+	const today = new Date();
+	const yesterday = new Date(today);
+	yesterday.setDate(yesterday.getDate() - 1);
+
+	if (d.toDateString() === today.toDateString()) {
+		return "Today";
+	} else if (d.toDateString() === yesterday.toDateString()) {
+		return "Yesterday";
+	} else {
+		return d.toLocaleDateString("en-US", {
+			month: "short",
+			day: "numeric",
+		});
+	}
 }
 
 /**
@@ -31,10 +40,10 @@ export function timeAgo(iso: string): string {
 	const diffH = Math.floor(diffMin / 60);
 	const diffD = Math.floor(diffH / 24);
 
-	if (diffMin < 1) return "ora";
-	if (diffMin < 60) return `${diffMin} min fa`;
-	if (diffH < 24) return `${diffH} ore fa`;
-	if (diffD < 7) return `${diffD} giorni fa`;
+	if (diffMin < 1) return "just now";
+	if (diffMin < 60) return `${diffMin} mins ago`;
+	if (diffH < 24) return `${diffH} hours ago`;
+	if (diffD < 7) return `${diffD} days ago`;
 	return formatDate(iso);
 }
 
@@ -74,13 +83,13 @@ export function getStatusColor(status: string): string {
 export function getStatusLabel(status: string): string {
 	switch (status) {
 		case "done":
-			return "Completato";
+			return "Completed";
 		case "in-progress":
-			return "In Corso";
+			return "In Progress";
 		case "review":
 			return "In Review";
 		case "todo":
-			return "Da Fare";
+			return "To Do";
 		default:
 			return status;
 	}

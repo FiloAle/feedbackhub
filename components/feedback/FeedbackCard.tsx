@@ -44,7 +44,7 @@ export default function FeedbackCard({
 		<div className="group rounded-2xl border border-border bg-white p-5 hover:border-sky-200 hover:shadow-sm transition-all animate-fade-in-up">
 			<div className="flex items-start gap-4">
 				{/* Avatar */}
-				<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-light text-accent text-sm font-semibold">
+				<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sky-100 text-sky-800 text-sm font-semibold">
 					{otherUser.avatar}
 				</div>
 

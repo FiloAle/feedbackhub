@@ -59,13 +59,16 @@ export const personalFeedbacks: PersonalFeedback[] = [
 		date: "2026-02-19T09:30:00",
 		reaction: "🔥",
 		sliders: [
-			{ label: "Collaborazione", value: 9 },
-			{ label: "Comunicazione", value: 8 },
-			{ label: "Proattività", value: 9 },
+			{ label: "Collaboration", value: 9 },
+			{ label: "Communication", value: 8 },
+			{ label: "Proactivity", value: 9 },
 		],
-		message: "Marco è sempre disponibile e porta energia positiva al team!",
+		message:
+			"Marco is always available and brings positive energy to the team!",
 		summary:
-			"Il tuo entusiasmo e la tua disponibilità sono contagiosi. Continua così, il team apprezza molto il tuo spirito collaborativo!",
+			"Your enthusiasm and helpfulness are contagious. Keep it up, the team really appreciates your collaborative spirit!",
+		strengths: ["s1", "s2"],
+		improvements: ["i3", "i6"],
 	},
 	{
 		id: "pf2",
@@ -74,14 +77,16 @@ export const personalFeedbacks: PersonalFeedback[] = [
 		date: "2026-02-18T14:20:00",
 		reaction: "🌟",
 		sliders: [
-			{ label: "Collaborazione", value: 8 },
-			{ label: "Comunicazione", value: 9 },
-			{ label: "Proattività", value: 7 },
+			{ label: "Collaboration", value: 8 },
+			{ label: "Communication", value: 9 },
+			{ label: "Proactivity", value: 7 },
 		],
 		message:
-			"Ottimo lavoro sulla presentazione di ieri, molto chiaro e strutturato.",
+			"Great job on yesterday's presentation, very clear and structured.",
 		summary:
-			"Le tue presentazioni sono un punto di riferimento per il team. La chiarezza espositiva è il tuo superpotere!",
+			"Your presentations are a benchmark for the team. Clarity is your superpower!",
+		strengths: ["s3", "s6"],
+		improvements: ["i4"],
 	},
 	{
 		id: "pf3",
@@ -90,14 +95,15 @@ export const personalFeedbacks: PersonalFeedback[] = [
 		date: "2026-02-18T11:00:00",
 		reaction: "💪",
 		sliders: [
-			{ label: "Collaborazione", value: 8 },
-			{ label: "Comunicazione", value: 7 },
-			{ label: "Proattività", value: 9 },
+			{ label: "Collaboration", value: 8 },
+			{ label: "Communication", value: 7 },
+			{ label: "Proactivity", value: 9 },
 		],
-		message:
-			"Luca ha risolto un bug critico in tempi record, grande dedizione!",
+		message: "Luca solved a critical bug in record time, great dedication!",
 		summary:
-			"La tua capacità di problem-solving sotto pressione è straordinaria. Il team può sempre contare su di te!",
+			"Your problem-solving ability under pressure is extraordinary. The team can always count on you!",
+		strengths: ["s5", "s4"],
+		improvements: ["i3"],
 	},
 	{
 		id: "pf4",
@@ -106,14 +112,15 @@ export const personalFeedbacks: PersonalFeedback[] = [
 		date: "2026-02-17T16:45:00",
 		reaction: "💡",
 		sliders: [
-			{ label: "Collaborazione", value: 9 },
-			{ label: "Comunicazione", value: 8 },
-			{ label: "Proattività", value: 8 },
+			{ label: "Collaboration", value: 9 },
+			{ label: "Communication", value: 8 },
+			{ label: "Proactivity", value: 8 },
 		],
-		message:
-			"Andrea porta sempre insights interessanti dai test con gli utenti.",
+		message: "Andrea always brings interesting insights from user testing.",
 		summary:
-			"I tuoi insights dalla ricerca utente guidano decisioni fondamentali. Continua ad esplorare!",
+			"Your insights from user research drive fundamental decisions. Keep exploring!",
+		strengths: ["s7", "s2"],
+		improvements: ["i2"],
 	},
 	{
 		id: "pf5",
@@ -122,13 +129,16 @@ export const personalFeedbacks: PersonalFeedback[] = [
 		date: "2026-02-17T10:15:00",
 		reaction: "🤝",
 		sliders: [
-			{ label: "Collaborazione", value: 10 },
-			{ label: "Comunicazione", value: 8 },
-			{ label: "Proattività", value: 8 },
+			{ label: "Collaboration", value: 10 },
+			{ label: "Communication", value: 8 },
+			{ label: "Proactivity", value: 8 },
 		],
-		message: "Sempre un piacere fare pair review con Marco, super costruttivo.",
+		message:
+			"Always a pleasure doing pair review with Marco, super constructive.",
 		summary:
-			"Il tuo approccio costruttivo nelle review fa crescere tutto il team. Sei un moltiplicatore di talenti!",
+			"Your constructive approach in reviews helps the whole team grow. You are a talent multiplier!",
+		strengths: ["s2", "s3"],
+		improvements: ["i5"],
 	},
 	{
 		id: "pf6",
@@ -137,13 +147,16 @@ export const personalFeedbacks: PersonalFeedback[] = [
 		date: "2026-02-16T15:00:00",
 		reaction: "❤️",
 		sliders: [
-			{ label: "Collaborazione", value: 9 },
-			{ label: "Comunicazione", value: 9 },
-			{ label: "Proattività", value: 7 },
+			{ label: "Collaboration", value: 9 },
+			{ label: "Communication", value: 9 },
+			{ label: "Proactivity", value: 7 },
 		],
-		message: "Marco ha un talento naturale per mediare e trovare compromessi.",
+		message:
+			"Marco has a natural talent for mediating and finding compromises.",
 		summary:
-			"La tua empatia e capacità di mediazione creano armonia nel team. Un dono prezioso!",
+			"Your attention to clean code and willingness to explain tech choices is an example for everyone!",
+		strengths: ["s1", "s3"],
+		improvements: ["i1"],
 	},
 	{
 		id: "pf7",
@@ -152,14 +165,16 @@ export const personalFeedbacks: PersonalFeedback[] = [
 		date: "2026-02-16T09:30:00",
 		reaction: "🔥",
 		sliders: [
-			{ label: "Collaborazione", value: 8 },
-			{ label: "Comunicazione", value: 9 },
-			{ label: "Proattività", value: 10 },
+			{ label: "Collaboration", value: 8 },
+			{ label: "Communication", value: 9 },
+			{ label: "Proactivity", value: 10 },
 		],
 		message:
-			"Elena ha proposto un'architettura componenti brillante per il nuovo progetto.",
+			"Elena proposed a brilliant component architecture for the new project.",
 		summary:
-			"La tua visione tecnica e proattività nel proporre soluzioni innovative sono fondamentali per il team!",
+			"Your technical vision and proactivity in proposing innovative solutions are fundamental for the team!",
+		strengths: ["s4", "s7"],
+		improvements: ["i6"],
 	},
 	{
 		id: "pf8",
@@ -168,14 +183,16 @@ export const personalFeedbacks: PersonalFeedback[] = [
 		date: "2026-02-15T17:00:00",
 		reaction: "🌟",
 		sliders: [
-			{ label: "Collaborazione", value: 8 },
-			{ label: "Comunicazione", value: 8 },
-			{ label: "Proattività", value: 9 },
+			{ label: "Collaboration", value: 8 },
+			{ label: "Communication", value: 8 },
+			{ label: "Proactivity", value: 9 },
 		],
 		message:
-			"Marco riesce sempre a tradurre i dati in design decisions concrete.",
+			"Marco always manages to translate data into concrete design decisions.",
 		summary:
-			"La tua capacità di connettere dati e design crea valore reale. Sei il ponte perfetto tra analytics e creatività!",
+			"Your ability to connect data and design creates real value. You are the perfect bridge between analytics and creativity!",
+		strengths: ["s1", "s5"],
+		improvements: ["i8"],
 	},
 ];
 
@@ -184,120 +201,80 @@ export const personalFeedbacks: PersonalFeedback[] = [
 export const projectTasks: ProjectTask[] = [
 	{
 		id: "t1",
-		title: "Redesign dashboard analytics",
+		title: "Check color contrasts of the color palette",
 		description:
-			"Riprogettare la sezione analytics della dashboard per migliorare la leggibilità dei dati.",
+			"The palette used for the dashboard UI has insufficient contrast ratios on some secondary elements. Check the colors of the labels and borders with a tool like Contrast Checker to comply with WCAG AA.",
 		status: "in-progress",
 		assigneeId: "u1",
 		fromUserId: "u4",
-		projectName: "FeedbackHub v2",
+		projectName: "MedioBanca Website",
 		dueDate: "2026-02-25",
 		receivedDate: "2026-02-17T10:00:00",
-		comments: [
-			{
-				id: "c1",
-				projectTaskId: "t1",
-				authorId: "u4",
-				content:
-					"Ottimo inizio! Potresti aggiungere un grafico a barre per il confronto settimanale?",
-				date: "2026-02-18T10:00:00",
-				replies: [
-					{
-						id: "r1",
-						authorId: "u1",
-						content:
-							"Buona idea, lo aggiungo nella prossima iterazione. Uso recharts.",
-						date: "2026-02-18T10:30:00",
-					},
-				],
-			},
-		],
+		comments: [],
 	},
 	{
 		id: "t2",
-		title: "Implementare notifiche push",
+		title: "Improve visual hierarchy of the product card",
 		description:
-			"Aggiungere il sistema di notifiche push per i feedback ricevuti.",
+			"The title and price have the same visual weight. Try increasing the font-weight of the price and slightly reducing the size of the title to better guide the user's eye.",
 		status: "todo",
-		assigneeId: "u2",
-		fromUserId: "u1",
-		projectName: "Mobile App",
+		assigneeId: "u1",
+		fromUserId: "u2",
+		projectName: "AXA Mobile App",
 		dueDate: "2026-02-28",
 		receivedDate: "2026-02-19T09:00:00",
 		comments: [],
 	},
 	{
 		id: "t3",
-		title: "Ottimizzare query database feedback",
+		title: "Review onboarding flow: too many steps",
 		description:
-			"Le query per lo storico feedback sono lente con dataset grandi. Aggiungere indici e paginazione.",
+			"The onboarding currently requires 6 steps before accessing the app. Consider reducing them to 3-4 by grouping optional information and offering a 'complete later' option.",
 		status: "review",
-		assigneeId: "u3",
-		fromUserId: "u1",
-		projectName: "Mobile App",
+		assigneeId: "u1",
+		fromUserId: "u3",
+		projectName: "AXA Mobile App",
 		dueDate: "2026-02-20",
 		receivedDate: "2026-02-16T14:30:00",
-		comments: [
-			{
-				id: "c2",
-				projectTaskId: "t3",
-				authorId: "u3",
-				content:
-					"Ho aggiunto indici compositi e paginazione cursor-based. Tempo di risposta sceso da 2s a 80ms.",
-				date: "2026-02-19T08:00:00",
-				aiSuggestion:
-					"Ottimo feedback tecnico! Potresti aggiungere i benchmark specifici per rendere il confronto più quantificabile.",
-				replies: [],
-			},
-		],
+		comments: [],
 	},
 	{
 		id: "t4",
-		title: "Creare onboarding flow nuovi utenti",
+		title: "Great use of spacing on the landing page",
 		description:
-			"Progettare e implementare il flusso di onboarding per i nuovi membri del team.",
+			"The vertical rhythm of the landing is very balanced and the hero section guides reading well. A suggestion: try adding a micro-animation to the main CTA to increase conversion.",
 		status: "in-progress",
 		assigneeId: "u5",
-		fromUserId: "u4",
-		projectName: "Website Redesign",
+		fromUserId: "u1",
+		projectName: "Eni Ad Campaign",
 		dueDate: "2026-02-22",
 		receivedDate: "2026-02-18T11:15:00",
 		comments: [],
 	},
 	{
 		id: "t5",
-		title: "Report mensile automatico",
+		title: "Icon consistency in the design system",
 		description:
-			"Generare automaticamente un report mensile con le metriche di feedback del team.",
+			"I noticed that some icons use stroke and others fill. For visual consistency, standardize to stroke-only with a thickness of 1.5px per the design system guidelines.",
 		status: "done",
 		assigneeId: "u6",
 		fromUserId: "u1",
-		projectName: "Website Redesign",
+		projectName: "Eni Ad Campaign",
 		dueDate: "2026-02-15",
 		receivedDate: "2026-02-10T09:00:00",
 		completedByReceiver: true,
 		markedUseful: true,
-		comments: [
-			{
-				id: "c3",
-				projectTaskId: "t5",
-				authorId: "u4",
-				content:
-					"Perfetto, il report è completo e ben strutturato. Ottimo lavoro Sara!",
-				date: "2026-02-15T16:00:00",
-				replies: [],
-			},
-		],
+		comments: [],
 	},
 	{
 		id: "t6",
-		title: "Integrazione Slack per reminder feedback",
+		title: "Align responsive breakpoints with new specs",
 		description:
-			"Inviare un reminder giornaliero su Slack per ricordare di inviare il feedback.",
+			"Current breakpoints don't match the updated design system specs. Update breakpoints to 640/768/1024/1280px and ensure the grid adapts correctly.",
 		status: "todo",
-		assigneeId: "u2",
-		fromUserId: "u1",
-		projectName: "Mobile App",
+		assigneeId: "u1",
+		fromUserId: "u4",
+		projectName: "MedioBanca Website",
 		dueDate: "2026-03-01",
 		receivedDate: "2026-02-19T08:30:00",
 		comments: [],
@@ -310,7 +287,7 @@ export const weeklyRecap: WeeklyRecap = {
 	userId: "u1",
 	weekStart: "2026-02-17",
 	phrase:
-		"Il tuo spirito costruttivo nelle review e la capacità di mediare creano un ambiente di lavoro positivo. Ricordati di consultare le guide di accessibilità sui contrasti colore per il redesign della dashboard. Continua a portare questa energia! 🌟",
+		"Your constructive spirit in reviews and ability to mediate create a positive work environment. Remember to check out the accessibility guidelines on color contrasts for the dashboard redesign. Keep bringing this energy! 🌟",
 	feedbackCount: 5,
 	topReaction: "🔥",
 };

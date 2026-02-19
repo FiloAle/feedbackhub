@@ -1,6 +1,10 @@
 "use client";
 
-import { IconPlus, IconSend, IconMessage } from "@/components/icons/Icons";
+import {
+	IoAddOutline,
+	IoPaperPlaneOutline,
+	IoDownloadOutline,
+} from "react-icons/io5";
 
 interface FABProps {
 	isExpanded: boolean;
@@ -20,12 +24,12 @@ export default function FAB({
 			{/* Main FAB button */}
 			<button
 				onClick={onToggle}
-				className={`flex h-14 w-14 items-center justify-center rounded-full bg-accent text-white shadow-lg shadow-sky-900/20 hover:bg-sky-900 hover:shadow-xl hover:shadow-sky-900/30 active:scale-95 transition-all duration-200 ${
+				className={`flex h-14 w-14 items-center justify-center rounded-full bg-sky-800 text-white shadow-lg shadow-sky-900/20 hover:bg-sky-900 hover:shadow-xl hover:shadow-sky-900/30 active:scale-95 transition-all duration-200 ${
 					isExpanded ? "rotate-45" : "rotate-0"
 				}`}
-				aria-label="Feedback menu"
+				aria-label="New action"
 			>
-				<IconPlus className="w-6 h-6" />
+				<IoAddOutline className="w-6 h-6" />
 			</button>
 
 			{/* Expanded actions */}
@@ -33,24 +37,24 @@ export default function FAB({
 				<div className="flex flex-col items-end gap-2 animate-fade-in-up">
 					<button
 						onClick={onSend}
-						className="flex items-center gap-2.5 rounded-full bg-white pl-4 pr-5 py-2.5 shadow-lg border border-border hover:border-sky-200 hover:shadow-xl transition-all active:scale-95"
+						className="flex items-center gap-2.5 rounded-full bg-white pl-2.5 pr-4 py-2.5 shadow-lg border border-border hover:border-sky-200 hover:shadow-xl transition-all active:scale-95"
 					>
-						<div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-white">
-							<IconSend className="w-4 h-4" />
+						<div className="flex h-8 w-8 items-center justify-center rounded-full bg-lime-600 text-white">
+							<IoPaperPlaneOutline className="w-4 h-4 -ms-0.5 mt-0.5" />
 						</div>
 						<span className="text-sm font-medium text-foreground whitespace-nowrap">
-							Invia feedback
+							Send
 						</span>
 					</button>
 					<button
 						onClick={onRequest}
-						className="flex items-center gap-2.5 rounded-full bg-white pl-4 pr-5 py-2.5 shadow-lg border border-border hover:border-sky-200 hover:shadow-xl transition-all active:scale-95"
+						className="flex items-center gap-2.5 rounded-full bg-white pl-2.5 pr-4 py-2.5 shadow-lg border border-border hover:border-sky-200 hover:shadow-xl transition-all active:scale-95"
 					>
-						<div className="flex h-8 w-8 items-center justify-center rounded-full bg-violet-600 text-white">
-							<IconMessage className="w-4 h-4" />
+						<div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-600 text-white">
+							<IoDownloadOutline className="w-4.5 h-4.5 -mt-0.5" />
 						</div>
 						<span className="text-sm font-medium text-foreground whitespace-nowrap">
-							Richiedi feedback
+							Request
 						</span>
 					</button>
 				</div>

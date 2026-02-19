@@ -17,7 +17,7 @@ export default function ProjectComment({ comment }: ProjectCommentProps) {
 		<div className="space-y-3">
 			<div className="rounded-xl border border-border bg-white p-4 hover:border-sky-200 transition-colors">
 				<div className="flex items-start gap-3">
-					<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent-light text-accent text-xs font-semibold">
+					<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sky-100 text-sky-800 text-xs font-semibold">
 						{author.avatar}
 					</div>
 					<div className="flex-1 min-w-0">

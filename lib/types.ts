@@ -27,6 +27,8 @@ export interface PersonalFeedback {
 	message: string;
 	summary: string; // AI-generated motivational summary shown to recipient
 	markedUseful?: boolean; // thumbs up from receiver
+	strengths?: string[]; // trait IDs from feedback-data.ts
+	improvements?: string[]; // trait IDs from feedback-data.ts
 }
 
 // ─── Project Feedback (Figma-style comments) ─────────────────────────────────

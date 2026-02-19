@@ -8,9 +8,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-	title: "FeedbackHub — Gestione Feedback Interpersonali",
+	title: "FeedbackHub — Interpersonal Feedback Management",
 	description:
-		"Software gestionale per aziende per la gestione dei feedback interpersonali e progettuali.",
+		"Company management software for managing interpersonal and project feedback.",
 };
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="it">
+		<html lang="en">
 			<body className={`${inter.variable} antialiased font-sans`}>
 				{children}
 			</body>
