@@ -57,6 +57,7 @@ export default function Home() {
 	const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
 		null,
 	);
+	const [projectFilter, setProjectFilter] = useState<string | null>(null);
 	const [selectedPersonalId, setSelectedPersonalId] = useState<string | null>(
 		null,
 	);
@@ -154,10 +155,10 @@ export default function Home() {
 			prev.map((t) =>
 				t.id === id
 					? {
-							...t,
-							completedByReceiver: !t.completedByReceiver,
-							ignoredByReceiver: false,
-						}
+						...t,
+						completedByReceiver: !t.completedByReceiver,
+						ignoredByReceiver: false,
+					}
 					: t,
 			),
 		);
@@ -168,10 +169,10 @@ export default function Home() {
 			prev.map((t) =>
 				t.id === id
 					? {
-							...t,
-							ignoredByReceiver: !t.ignoredByReceiver,
-							completedByReceiver: false,
-						}
+						...t,
+						ignoredByReceiver: !t.ignoredByReceiver,
+						completedByReceiver: false,
+					}
 					: t,
 			),
 		);
@@ -200,8 +201,17 @@ export default function Home() {
 	};
 
 	// ─── Current lists ───────────────────────────────────────────────────
-	const currentProjectList =
+	const baseProjectList =
 		subTab === "ricevuti" ? receivedProjects : sentProjects;
+	const currentProjectList = projectFilter
+		? baseProjectList.filter((t) => t.projectName === projectFilter)
+		: baseProjectList;
+
+	// Unique project names for filter
+	const projectNames = useMemo(
+		() => [...new Set(tasks.map((t) => t.projectName))].sort(),
+		[tasks],
+	);
 	const currentPersonalList =
 		subTab === "ricevuti" ? receivedPersonal : sentPersonal;
 
@@ -258,6 +268,14 @@ export default function Home() {
 					</div>
 				</section>
 
+				{/* ─── Section Title ─── */}
+				<h2
+					className="text-lg font-semibold text-foreground animate-fade-in-up"
+					style={{ animationDelay: "0.07s" }}
+				>
+					Dai un&apos;occhiata ai tuoi feedback
+				</h2>
+
 				{/* ─── Navbar (3 tabs) ─── */}
 				<div
 					className="flex items-center gap-1 bg-gray-100 rounded-xl p-1 animate-fade-in-up"
@@ -271,11 +289,10 @@ export default function Home() {
 								setSelectedProjectId(null);
 								setSelectedPersonalId(null);
 							}}
-							className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all capitalize ${
-								mainTab === tab
-									? "bg-white text-foreground shadow-sm"
-									: "text-muted hover:text-foreground"
-							}`}
+							className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all capitalize ${mainTab === tab
+								? "bg-white text-foreground shadow-sm"
+								: "text-muted hover:text-foreground"
+								}`}
 						>
 							{tab}
 						</button>
@@ -295,11 +312,10 @@ export default function Home() {
 								setSelectedProjectId(null);
 								setSelectedPersonalId(null);
 							}}
-							className={`text-sm font-medium pb-1 border-b-2 transition-all capitalize ${
-								subTab === tab
-									? "border-accent text-accent"
-									: "border-transparent text-muted hover:text-foreground"
-							}`}
+							className={`text-sm font-medium pb-1 border-b-2 transition-all capitalize ${subTab === tab
+								? "border-accent text-accent"
+								: "border-transparent text-muted hover:text-foreground"
+								}`}
 						>
 							{tab}
 						</button>
@@ -316,6 +332,32 @@ export default function Home() {
 						<>
 							{/* List */}
 							<div className="lg:col-span-2 space-y-2 overflow-y-auto max-h-[60vh] pr-1 custom-scrollbar">
+								{/* Project filter chips */}
+								<div className="flex items-center gap-2 flex-wrap pb-1">
+									<button
+										onClick={() => setProjectFilter(null)}
+										className={`text-xs font-medium px-3 py-1.5 rounded-full transition-all ${projectFilter === null
+											? "bg-accent text-white"
+											: "bg-gray-100 text-muted hover:bg-gray-200"
+											}`}
+									>
+										Tutti
+									</button>
+									{projectNames.map((name) => (
+										<button
+											key={name}
+											onClick={() =>
+												setProjectFilter(projectFilter === name ? null : name)
+											}
+											className={`text-xs font-medium px-3 py-1.5 rounded-full transition-all ${projectFilter === name
+												? "bg-accent text-white"
+												: "bg-gray-100 text-muted hover:bg-gray-200"
+												}`}
+										>
+											{name}
+										</button>
+									))}
+								</div>
 								{currentProjectList.length > 0 ? (
 									currentProjectList.map((task) => {
 										const isSelected = selectedProjectId === task.id;
@@ -328,11 +370,10 @@ export default function Home() {
 											<div
 												key={task.id}
 												onClick={() => setSelectedProjectId(task.id)}
-												className={`rounded-xl border p-3.5 cursor-pointer transition-all ${
-													isSelected
-														? "border-accent bg-accent-light/50"
-														: "border-border bg-white hover:border-sky-200"
-												}`}
+												className={`rounded-xl border p-3.5 cursor-pointer transition-all ${isSelected
+													? "border-accent bg-accent-light/50"
+													: "border-border bg-white hover:border-sky-200"
+													}`}
 											>
 												<div className="flex items-center justify-between mb-1">
 													<div className="flex items-center gap-2">
@@ -425,11 +466,10 @@ export default function Home() {
 														onClick={() =>
 															toggleProjectCompleted(selectedProject.id)
 														}
-														className={`flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg transition-all ${
-															selectedProject.completedByReceiver
-																? "bg-emerald-100 text-emerald-700"
-																: "bg-gray-100 text-gray-600 hover:bg-emerald-50 hover:text-emerald-600"
-														}`}
+														className={`flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg transition-all ${selectedProject.completedByReceiver
+															? "bg-emerald-100 text-emerald-700"
+															: "bg-gray-100 text-gray-600 hover:bg-emerald-50 hover:text-emerald-600"
+															}`}
 													>
 														<IconCheck className="w-3.5 h-3.5" />
 														{selectedProject.completedByReceiver
@@ -441,11 +481,10 @@ export default function Home() {
 															onClick={() =>
 																toggleProjectIgnored(selectedProject.id)
 															}
-															className={`text-xs font-medium px-3 py-2 rounded-lg transition-all ${
-																selectedProject.ignoredByReceiver
-																	? "bg-gray-200 text-gray-700"
-																	: "bg-gray-100 text-gray-500 hover:bg-gray-200"
-															}`}
+															className={`text-xs font-medium px-3 py-2 rounded-lg transition-all ${selectedProject.ignoredByReceiver
+																? "bg-gray-200 text-gray-700"
+																: "bg-gray-100 text-gray-500 hover:bg-gray-200"
+																}`}
 														>
 															{selectedProject.ignoredByReceiver
 																? "Ignorato"
@@ -464,11 +503,10 @@ export default function Home() {
 															onClick={() =>
 																toggleProjectUseful(selectedProject.id)
 															}
-															className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-all ${
-																selectedProject.markedUseful
-																	? "bg-accent text-white"
-																	: "bg-white text-accent border border-accent hover:bg-accent/10"
-															}`}
+															className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-all ${selectedProject.markedUseful
+																? "bg-accent text-white"
+																: "bg-white text-accent border border-accent hover:bg-accent/10"
+																}`}
 														>
 															{selectedProject.markedUseful
 																? "👍 Utile!"
@@ -545,11 +583,10 @@ export default function Home() {
 											<div
 												key={fb.id}
 												onClick={() => setSelectedPersonalId(fb.id)}
-												className={`rounded-xl border p-3.5 cursor-pointer transition-all ${
-													isSelected
-														? "border-accent bg-accent-light/50"
-														: "border-border bg-white hover:border-sky-200"
-												}`}
+												className={`rounded-xl border p-3.5 cursor-pointer transition-all ${isSelected
+													? "border-accent bg-accent-light/50"
+													: "border-border bg-white hover:border-sky-200"
+													}`}
 											>
 												<div className="flex items-center justify-between mb-1">
 													<span className="text-xl">{fb.reaction}</span>
@@ -647,11 +684,10 @@ export default function Home() {
 														onClick={() =>
 															togglePersonalUseful(selectedPersonal.id)
 														}
-														className={`flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg transition-all ${
-															selectedPersonal.markedUseful
-																? "bg-accent text-white"
-																: "bg-gray-100 text-gray-600 hover:bg-sky-50 hover:text-accent"
-														}`}
+														className={`flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg transition-all ${selectedPersonal.markedUseful
+															? "bg-accent text-white"
+															: "bg-gray-100 text-gray-600 hover:bg-sky-50 hover:text-accent"
+															}`}
 													>
 														👍{" "}
 														{selectedPersonal.markedUseful
@@ -687,7 +723,7 @@ export default function Home() {
 			{/* ─── Floating Daily Feedback Banner ─── */}
 			{!dailyFeedbackSent && (
 				<div className="fixed bottom-8 left-64 right-0 z-40 flex justify-center pointer-events-none animate-fade-in-up">
-					<div className="flex items-center gap-4 bg-gradient-to-r from-sky-600 to-sky-700 text-white rounded-2xl px-6 h-14 shadow-lg pointer-events-auto w-[560px]">
+					<div className="flex items-center gap-4 bg-gradient-to-r from-sky-600 to-sky-700 text-white rounded-2xl p-4 shadow-lg pointer-events-auto w-[560px]">
 						<div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 text-xs font-bold">
 							{dailyTarget.avatar}
 						</div>
