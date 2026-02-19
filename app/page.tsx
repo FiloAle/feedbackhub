@@ -517,7 +517,7 @@ export default function Home() {
 									</button>
 								</div>
 								{/* List */}
-								<div className="space-y-2 overflow-y-auto max-h-[60vh] pr-1 custom-scrollbar">
+								<div className="space-y-2 overflow-y-auto no-scrollbar max-h-[60vh] pr-1">
 									{currentProjectList.length > 0 ? (
 										currentProjectList.map((task) => {
 											const isSelected = selectedProjectId === task.id;
@@ -576,7 +576,7 @@ export default function Home() {
 							</div>
 
 							{/* Detail */}
-							<div className="lg:col-span-3 rounded-2xl border border-border bg-white p-6 overflow-y-auto h-[60vh] custom-scrollbar self-start">
+							<div className="lg:col-span-3 rounded-2xl border border-border bg-white p-6 overflow-y-auto no-scrollbar h-[60vh] self-start">
 								{selectedProject ? (
 									<div className="animate-fade-in">
 										{/* Header */}
@@ -774,7 +774,7 @@ export default function Home() {
 					{mainTab === "personal" && (
 						<>
 							{/* List */}
-							<div className="lg:col-span-2 space-y-2 overflow-y-auto max-h-[60vh] pr-1 custom-scrollbar">
+							<div className="lg:col-span-2 space-y-2 overflow-y-auto no-scrollbar max-h-[60vh] pr-1">
 								{currentPersonalList.length > 0 ? (
 									currentPersonalList.map((fb) => {
 										const isSelected = selectedPersonalId === fb.id;
@@ -835,7 +835,7 @@ export default function Home() {
 							</div>
 
 							{/* Detail */}
-							<div className="lg:col-span-3 rounded-2xl border border-border bg-white p-6 overflow-y-auto max-h-[60vh] custom-scrollbar">
+							<div className="lg:col-span-3 rounded-2xl border border-border bg-white p-6 overflow-y-auto no-scrollbar max-h-[60vh]">
 								{selectedPersonal ? (
 									(() => {
 										const other = users.find(

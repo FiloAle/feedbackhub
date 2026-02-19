@@ -263,7 +263,7 @@ export default function SidePanel({
 				</div>
 
 				{/* Content */}
-				<div className="flex-1 overflow-y-auto px-6 py-6">
+				<div className="flex-1 overflow-y-auto no-scrollbar px-6 py-6">
 					{/* ═══ SEND: Type selection ═══ */}
 					{view === "select" && (
 						<div className="space-y-3 animate-fade-in-up">

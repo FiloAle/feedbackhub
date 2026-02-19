@@ -134,7 +134,7 @@ export default function Header({
 									</button>
 								)}
 							</div>
-							<div className="max-h-[360px] overflow-y-auto custom-scrollbar">
+							<div className="max-h-[360px] overflow-y-auto no-scrollbar">
 								{notifications.map((notif) => (
 									<button
 										key={notif.id}
