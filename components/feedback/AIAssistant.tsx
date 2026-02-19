@@ -13,9 +13,7 @@ export default function AIAssistant({ suggestion }: AIAssistantProps) {
 				<IoSparklesOutline className="w-4 h-4" />
 			</div>
 			<div>
-				<p className="text-xs font-semibold text-sky-800 mb-1">
-					Suggerimento AI
-				</p>
+				<p className="text-xs font-semibold text-sky-800 mb-1">AI Suggestion</p>
 				<p className="text-sm text-foreground/80 leading-relaxed">
 					{suggestion}
 				</p>

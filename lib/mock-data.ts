@@ -194,6 +194,42 @@ export const personalFeedbacks: PersonalFeedback[] = [
 		strengths: ["s1", "s5"],
 		improvements: ["i8"],
 	},
+	{
+		id: "pf9",
+		fromUserId: "u3",
+		toUserId: "u1",
+		date: "2026-02-14T10:00:00",
+		reaction: "💡",
+		sliders: [
+			{ label: "Collaboration", value: 6 },
+			{ label: "Communication", value: 5 },
+			{ label: "Proactivity", value: 6 },
+		],
+		message:
+			"The palette currently used does not respect color contrast guidelines on some secondary elements.",
+		summary:
+			"Great ideas, but attention to accessibility guidelines on color contrasts is needed. A small check can make a big difference!",
+		strengths: ["s7"],
+		improvements: ["i4", "i2"],
+	},
+	{
+		id: "pf10",
+		fromUserId: "u1",
+		toUserId: "u4",
+		date: "2026-02-13T14:30:00",
+		reaction: "🤝",
+		sliders: [
+			{ label: "Collaboration", value: 5 },
+			{ label: "Communication", value: 6 },
+			{ label: "Proactivity", value: 5 },
+		],
+		message:
+			"The project onboarding currently requires too many steps before accessing the app. We could optimize it.",
+		summary:
+			"Simplifying the user flow could greatly improve the experience. Let's try to focus on the essential information first.",
+		strengths: ["s6"],
+		improvements: ["i2", "i6"],
+	},
 ];
 
 // ─── Project Tasks ───────────────────────────────────────────────────────────

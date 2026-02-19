@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-	title: "FeedbackHub — Interpersonal Feedback Management",
+	title: "FeedbackHub",
 	description:
 		"Company management software for managing interpersonal and project feedback.",
 };

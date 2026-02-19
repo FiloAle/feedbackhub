@@ -73,7 +73,7 @@ export default function Home() {
 		}
 		// Days until Friday
 		const daysUntilFriday = (5 - dayOfWeek + 7) % 7 || 7;
-		return `${daysUntilFriday} days left`;
+		return `${daysUntilFriday} day${daysUntilFriday !== 1 ? "s" : ""} left`;
 	};
 
 	const remainingTargets = weeklyTargets.filter(
@@ -328,7 +328,7 @@ export default function Home() {
 							</div>
 						</div>
 						<div className="flex items-center gap-1.5">
-							<div className="flex-1 h-1.5 bg-white/60 rounded-full overflow-hidden">
+							<div className="flex-1 h-1.5 bg-black/15 rounded-full overflow-hidden">
 								<div
 									className="h-full bg-teal-600 rounded-full"
 									style={{ width: `${receivedPositive}%` }}
@@ -356,7 +356,7 @@ export default function Home() {
 							</div>
 						</div>
 						<div className="flex items-center gap-1.5">
-							<div className="flex-1 h-1.5 bg-white/60 rounded-full overflow-hidden">
+							<div className="flex-1 h-1.5 bg-black/15 rounded-full overflow-hidden">
 								<div
 									className="h-full bg-lime-600 rounded-full"
 									style={{ width: `${sentPositive}%` }}
@@ -538,15 +538,20 @@ export default function Home() {
 															: "border-border bg-white hover:border-sky-200"
 													}`}
 												>
-													<div className="flex items-center justify-between mb-1">
-														<div className="flex items-center gap-2">
+													<div className="flex items-center justify-between mb-1 gap-2">
+														<div className="flex items-center gap-1.5 flex-1 min-w-0">
+															{!projectFilter && (
+																<span className="text-[10px] font-medium px-2 py-0.5 rounded-full border border-slate-200 text-slate-600 truncate max-w-[100px]">
+																	{task.projectName}
+																</span>
+															)}
 															<span
-																className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${getStatusColor(task.status)}`}
+																className={`text-[10px] font-medium px-2 py-0.5 rounded-full shrink-0 ${getStatusColor(task.status)}`}
 															>
 																{getStatusLabel(task.status)}
 															</span>
 														</div>
-														<span className="text-[10px] text-muted">
+														<span className="text-[10px] text-muted shrink-0">
 															{formatDate(task.receivedDate)}
 														</span>
 													</div>
@@ -1013,7 +1018,7 @@ export default function Home() {
 							{remainingTargets.map((t) => (
 								<div
 									key={t.id}
-									className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 text-xs font-bold border-2 border-sky-600"
+									className="flex h-9 w-9 items-center justify-center rounded-full bg-sky-50 text-xs text-sky-600 font-bold border-2 border-sky-600"
 								>
 									{t.avatar}
 								</div>
@@ -1058,7 +1063,7 @@ export default function Home() {
 								setFabExpanded(false);
 								setIsPanelOpen(true);
 							}}
-							className="shrink-0 flex items-center gap-1.5 rounded-lg bg-white text-sky-700 px-4 py-2 text-sm font-semibold hover:bg-sky-50 transition-all active:scale-95"
+							className="shrink-0 flex items-center gap-1.5 rounded-lg bg-white text-sky-700 px-4 py-2 text-sm font-semibold hover:bg-sky-50 transition-all active:scale-95 cursor-pointer"
 						>
 							Send
 							<IoChevronForwardOutline className="w-3.5 h-3.5" />

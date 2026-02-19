@@ -107,7 +107,7 @@ export default function Header({
 				<div className="relative" ref={panelRef}>
 					<button
 						onClick={() => setIsNotifOpen(!isNotifOpen)}
-						className="relative flex h-9 w-9 items-center justify-center rounded-full hover:bg-gray-100 text-muted hover:text-foreground transition-colors"
+						className="relative flex h-9 w-9 items-center justify-center rounded-full hover:bg-gray-100 text-muted hover:text-foreground transition-colors cursor-pointer"
 					>
 						<IoNotificationsOutline className="w-5 h-5" />
 						{unreadCount > 0 && (

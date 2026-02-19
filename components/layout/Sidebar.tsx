@@ -46,15 +46,13 @@ export default function Sidebar() {
 			{/* Logo */}
 			<div className="flex h-16 items-center gap-3 border-b border-border px-6">
 				<div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-800 text-white font-bold text-sm">
-					Hb
+					HB
 				</div>
 				<div>
 					<h1 className="text-base font-semibold text-foreground tracking-tight">
 						Hubby
 					</h1>
-					<p className="text-[11px] text-muted leading-none">
-						Team Feedback Platform
-					</p>
+					<p className="text-[11px] text-muted leading-none">TeamSystem</p>
 				</div>
 			</div>
 
