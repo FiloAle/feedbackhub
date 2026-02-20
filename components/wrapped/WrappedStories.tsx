@@ -33,7 +33,7 @@ const stories: Story[] = [
 		subtitle: "This shows how much the team values your work!",
 	},
 	{
-		gradient: "from-emerald-600 via-green-500 to-lime-400",
+		gradient: "from-emerald-600 via-green-500 to-emerald-400",
 		emoji: "🚀",
 		title: "And you sent",
 		highlight: "5 feedbacks",
@@ -61,7 +61,7 @@ const stories: Story[] = [
 		subtitle: "The most positive feedback of the year!",
 	},
 	{
-		gradient: "from-teal-600 via-emerald-500 to-green-400",
+		gradient: "from-teal-600 via-lime-500 to-green-400",
 		emoji: "🔥",
 		title: "Your longest streak",
 		highlight: "6 weeks in a row",

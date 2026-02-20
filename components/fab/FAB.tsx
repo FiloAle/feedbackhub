@@ -37,7 +37,7 @@ export default function FAB({
 				<div className="flex flex-col items-end gap-2 animate-fade-in-up">
 					<button
 						onClick={onSend}
-						className="flex items-center gap-2.5 rounded-full bg-white pl-2.5 pr-4 py-2.5 shadow-lg border border-border hover:border-sky-200 hover:shadow-xl transition-all active:scale-95 cursor-pointer"
+						className="flex items-center gap-2.5 rounded-full bg-white pl-2.5 pr-4 py-2.5 shadow-lg border border-border hover:border-lime-600 hover:bg-lime-50 hover:shadow-xl transition-all duration-300 active:scale-95 cursor-pointer"
 					>
 						<div className="flex h-8 w-8 items-center justify-center rounded-full bg-lime-600 text-white">
 							<IoPaperPlaneOutline className="w-4 h-4 -ms-0.5 mt-0.5" />
@@ -48,7 +48,7 @@ export default function FAB({
 					</button>
 					<button
 						onClick={onRequest}
-						className="flex items-center gap-2.5 rounded-full bg-white pl-2.5 pr-4 py-2.5 shadow-lg border border-border hover:border-sky-200 hover:shadow-xl transition-all active:scale-95 cursor-pointer"
+						className="flex items-center gap-2.5 rounded-full bg-white pl-2.5 pr-4 py-2.5 shadow-lg border border-border hover:border-teal-600 hover:bg-teal-50 hover:shadow-xl transition-all duration-300 active:scale-95 cursor-pointer"
 					>
 						<div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-600 text-white">
 							<IoDownloadOutline className="w-4.5 h-4.5 -mt-0.5" />

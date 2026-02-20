@@ -65,7 +65,7 @@ export function getInitials(name: string): string {
 export function getStatusColor(status: string): string {
 	switch (status) {
 		case "done":
-			return "bg-emerald-100 text-emerald-700";
+			return "bg-lime-100 text-lime-700";
 		case "in-progress":
 			return "bg-sky-100 text-sky-800";
 		case "review":

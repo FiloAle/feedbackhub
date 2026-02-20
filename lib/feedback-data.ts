@@ -65,7 +65,7 @@ export const reactionsData: Record<string, ReactionData> = {
 	"🤝": {
 		label: "Team Player",
 		title: "A true team player",
-		colorClass: "bg-emerald-200 text-emerald-700",
+		colorClass: "bg-lime-200 text-lime-700",
 	},
 	"💡": {
 		label: "Creative",

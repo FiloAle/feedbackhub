@@ -110,6 +110,10 @@ export default function SidePanel({
 	const [reqAttachments, setReqAttachments] = useState<string[]>([]);
 	const [reqFigmaLinked, setReqFigmaLinked] = useState(false);
 
+	// Custom Dropdown Open States
+	const [sendTaskDropdownOpen, setSendTaskDropdownOpen] = useState(false);
+	const [reqTaskDropdownOpen, setReqTaskDropdownOpen] = useState(false);
+
 	const feedbackTarget = lockedTarget || selectedPerson;
 	const aiHint = analyzeComment(projectComment);
 
@@ -124,6 +128,8 @@ export default function SidePanel({
 		setReqNotes("");
 		setReqAttachments([]);
 		setReqFigmaLinked(false);
+		setSendTaskDropdownOpen(false);
+		setReqTaskDropdownOpen(false);
 	};
 
 	const handleClose = () => {
@@ -258,7 +264,7 @@ export default function SidePanel({
 						onClick={handleClose}
 						className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-gray-100 text-muted transition-colors"
 					>
-						<IoCloseOutline className="w-5 h-5 text-sky-800" />
+						<IoCloseOutline className="w-5 h-5 text-lime-800" />
 					</button>
 				</div>
 
@@ -275,9 +281,9 @@ export default function SidePanel({
 									if (lockedTarget) setView("personal");
 									else setView("pick-person");
 								}}
-								className="flex w-full items-center gap-4 rounded-2xl border-2 border-border bg-white p-5 text-left hover:border-sky-200 hover:bg-sky-50/50 transition-all group"
+								className="flex w-full items-center gap-4 rounded-2xl border border-border bg-white p-5 text-left hover:border-lime-200 hover:bg-lime-50/50 transition-all group"
 							>
-								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 text-sky-800 group-hover:bg-sky-800 group-hover:text-white transition-colors">
+								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-lime-100 text-lime-800 group-hover:bg-lime-800 group-hover:text-white transition-colors">
 									<IoPersonOutline className="w-6 h-6" />
 								</div>
 								<div>
@@ -291,9 +297,9 @@ export default function SidePanel({
 							</button>
 							<button
 								onClick={() => setView("project")}
-								className="flex w-full items-center gap-4 rounded-2xl border-2 border-border bg-white p-5 text-left hover:border-sky-200 hover:bg-sky-50/50 transition-all group"
+								className="flex w-full items-center gap-4 rounded-2xl border border-border bg-white p-5 text-left hover:border-lime-200 hover:bg-lime-50/50 transition-all group"
 							>
-								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 text-sky-800 group-hover:bg-sky-800 group-hover:text-white transition-colors">
+								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-lime-100 text-lime-800 group-hover:bg-lime-800 group-hover:text-white transition-colors">
 									<IoClipboardOutline className="w-6 h-6" />
 								</div>
 								<div>
@@ -321,9 +327,9 @@ export default function SidePanel({
 										setSelectedPerson(user);
 										setView("personal");
 									}}
-									className="flex w-full items-center gap-3 rounded-xl border border-border bg-white p-4 text-left hover:border-sky-200 hover:bg-sky-50/50 transition-all"
+									className="flex w-full items-center gap-3 rounded-xl border border-border bg-white p-4 text-left hover:border-lime-200 hover:bg-lime-50/50 transition-all"
 								>
-									<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sky-100 text-sky-800 text-sm font-semibold">
+									<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lime-100 text-lime-800 text-sm font-semibold">
 										{user.avatar}
 									</div>
 									<div>
@@ -352,9 +358,9 @@ export default function SidePanel({
 											setSelectedPerson(user);
 											setView("personal");
 										}}
-										className="flex w-full items-center gap-3 rounded-xl border border-border bg-white p-4 text-left hover:border-sky-200 hover:bg-sky-50/50 transition-all"
+										className="flex w-full items-center gap-3 rounded-xl border border-border bg-white p-4 text-left hover:border-lime-200 hover:bg-lime-50/50 transition-all"
 									>
-										<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sky-100 text-sky-800 text-sm font-semibold">
+										<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lime-100 text-lime-800 text-sm font-semibold">
 											{user.avatar}
 										</div>
 										<div>
@@ -383,17 +389,59 @@ export default function SidePanel({
 								<label className="text-sm font-medium text-foreground mb-1.5 block">
 									Task
 								</label>
-								<select
-									value={selectedTaskId}
-									onChange={(e) => setSelectedTaskId(e.target.value)}
-									className="w-full rounded-xl border border-border bg-white px-4 py-2.5 text-sm text-foreground focus:border-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-800/10"
-								>
-									{projectTasks.map((t) => (
-										<option key={t.id} value={t.id}>
-											{t.title}
-										</option>
-									))}
-								</select>
+								<div className="relative">
+									<button
+										onClick={() =>
+											setSendTaskDropdownOpen(!sendTaskDropdownOpen)
+										}
+										className="flex w-full items-center justify-between rounded-xl border border-border bg-white px-4 py-2.5 text-sm text-foreground focus:border-lime-800 focus:outline-none focus:ring-2 focus:ring-lime-800/10 hover:bg-gray-50 transition-all text-left"
+									>
+										<span className="truncate pr-4">
+											{projectTasks.find((t) => t.id === selectedTaskId)
+												?.title || "Select a task..."}
+										</span>
+										<svg
+											className={`w-4 h-4 text-muted shrink-0 transition-transform ${sendTaskDropdownOpen ? "rotate-180" : ""}`}
+											fill="none"
+											viewBox="0 0 24 24"
+											strokeWidth={2}
+											stroke="currentColor"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+											/>
+										</svg>
+									</button>
+									{sendTaskDropdownOpen && (
+										<>
+											<div
+												className="fixed inset-0 z-30"
+												onClick={() => setSendTaskDropdownOpen(false)}
+											/>
+											<div className="absolute left-0 top-full mt-1 z-40 w-full bg-white rounded-xl border border-border shadow-lg py-1 max-h-[250px] overflow-y-auto no-scrollbar animate-fade-in">
+												{projectTasks.map((task) => (
+													<button
+														key={task.id}
+														onClick={() => {
+															setSelectedTaskId(task.id);
+															setSendTaskDropdownOpen(false);
+														}}
+														className={`flex flex-col w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors ${selectedTaskId === task.id ? "bg-lime-50 text-lime-800" : ""}`}
+													>
+														<span className="text-sm font-medium truncate w-full">
+															{task.title}
+														</span>
+														<span className="text-[10px] text-muted truncate w-full">
+															{task.projectName}
+														</span>
+													</button>
+												))}
+											</div>
+										</>
+									)}
+								</div>
 							</div>
 							<div>
 								<label className="text-sm font-medium text-foreground mb-1.5 block">
@@ -404,16 +452,16 @@ export default function SidePanel({
 									onChange={(e) => setProjectComment(e.target.value)}
 									placeholder="Write your feedback on the task... Be specific and constructive."
 									rows={5}
-									className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-gray-400 focus:border-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-800/10 resize-none"
+									className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-gray-400 focus:border-lime-800 focus:outline-none focus:ring-2 focus:ring-lime-800/10 resize-none"
 								/>
 							</div>
 							{aiHint && (
-								<div className="flex gap-3 rounded-xl bg-gradient-to-r from-sky-50 to-indigo-50 border border-sky-200 p-4 animate-fade-in-up">
-									<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-sky-800/10 text-sky-800">
+								<div className="flex gap-3 rounded-xl bg-gradient-to-r from-lime-50 to-indigo-50 border border-lime-200 p-4 animate-fade-in-up">
+									<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-lime-800/10 text-lime-800">
 										<IoSparklesOutline className="w-5 h-5 animate-scale-in" />
 									</div>
 									<div>
-										<p className="text-xs font-semibold text-sky-800 mb-1">
+										<p className="text-xs font-semibold text-lime-800 mb-1">
 											AI Suggestion
 										</p>
 										<p className="text-sm text-foreground/80 leading-relaxed">
@@ -425,7 +473,7 @@ export default function SidePanel({
 							<button
 								onClick={handleSendProjectComment}
 								disabled={projectComment.trim().length < 5}
-								className="flex w-full items-center justify-center gap-2 rounded-xl bg-sky-800 px-5 py-3 text-sm font-medium text-white hover:bg-sky-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+								className="flex w-full items-center justify-center gap-2 rounded-xl bg-lime-800 px-5 py-3 text-sm font-medium text-white hover:bg-lime-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
 							>
 								<IoSendOutline className="w-4 h-4" />
 								Send Comment
@@ -436,7 +484,7 @@ export default function SidePanel({
 					{/* ═══ SEND: Project sent confirmation ═══ */}
 					{view === "project" && commentSent && (
 						<div className="flex flex-col items-center justify-center py-16 animate-scale-in">
-							<div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-4">
+							<div className="flex h-16 w-16 items-center justify-center rounded-full bg-lime-100 text-lime-600 mb-4">
 								<IoCheckmarkOutline className="w-8 h-8" />
 							</div>
 							<h3 className="text-lg font-semibold text-foreground mb-1">
@@ -463,9 +511,9 @@ export default function SidePanel({
 									setReqType("personal");
 									setView("req-pick-person");
 								}}
-								className="flex w-full items-center gap-4 rounded-2xl border-2 border-border bg-white p-5 text-left hover:border-violet-200 hover:bg-violet-50/50 transition-all group"
+								className="flex w-full items-center gap-4 rounded-2xl border border-border bg-white p-5 text-left hover:border-teal-600 hover:bg-teal-50 transition-all group"
 							>
-								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100 text-violet-600 group-hover:bg-violet-600 group-hover:text-white transition-colors">
+								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-100 text-teal-600 group-hover:bg-teal-600 group-hover:text-white transition-colors">
 									<IoPersonOutline className="w-6 h-6" />
 								</div>
 								<div>
@@ -482,9 +530,9 @@ export default function SidePanel({
 									setReqType("project");
 									setView("req-pick-person");
 								}}
-								className="flex w-full items-center gap-4 rounded-2xl border-2 border-border bg-white p-5 text-left hover:border-violet-200 hover:bg-violet-50/50 transition-all group"
+								className="flex w-full items-center gap-4 rounded-2xl border border-border bg-white p-5 text-left hover:border-teal-600 hover:bg-teal-50 transition-all group"
 							>
-								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100 text-violet-600 group-hover:bg-violet-600 group-hover:text-white transition-colors">
+								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-100 text-teal-600 group-hover:bg-teal-600 group-hover:text-white transition-colors">
 									<IoClipboardOutline className="w-6 h-6" />
 								</div>
 								<div>
@@ -518,9 +566,9 @@ export default function SidePanel({
 												setView("req-project-task");
 											}
 										}}
-										className="flex w-full items-center gap-3 rounded-xl border border-border bg-white p-4 text-left hover:border-violet-200 hover:bg-violet-50/50 transition-all"
+										className="flex w-full items-center gap-3 rounded-xl border border-border bg-white p-4 text-left hover:border-teal-600 hover:bg-teal-50 transition-all"
 									>
-										<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet-100 text-violet-600 text-sm font-semibold">
+										<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-teal-100 text-teal-600 text-sm font-semibold">
 											{user.avatar}
 										</div>
 										<div>
@@ -549,10 +597,10 @@ export default function SidePanel({
 									<button
 										key={area.id}
 										onClick={() => setReqSelectedArea(area.id)}
-										className={`flex items-center gap-2 rounded-xl border-2 px-3 py-3 text-left transition-all ${
+										className={`flex items-center gap-2 rounded-xl border px-3 py-3 text-left transition-all ${
 											reqSelectedArea === area.id
-												? "border-violet-400 bg-violet-50"
-												: "border-border bg-white hover:border-violet-200 hover:bg-violet-50/50"
+												? "border-teal-600 bg-teal-50"
+												: "border-border bg-white hover:border-teal-200 hover:bg-teal-50"
 										}`}
 									>
 										<span className="text-lg">{area.emoji}</span>
@@ -565,7 +613,7 @@ export default function SidePanel({
 							<button
 								onClick={() => setView("req-details")}
 								disabled={!reqSelectedArea}
-								className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-medium text-white hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all mt-4"
+								className="flex w-full items-center justify-center gap-2 rounded-xl bg-teal-600 px-5 py-3 text-sm font-medium text-white hover:bg-teal-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all mt-4"
 							>
 								Next
 							</button>
@@ -582,35 +630,63 @@ export default function SidePanel({
 								</span>
 								?
 							</p>
-							<div className="space-y-2">
-								{projectTasks.map((task) => (
-									<button
-										key={task.id}
-										onClick={() => setReqSelectedTask(task.id)}
-										className={`flex w-full items-start gap-3 rounded-xl border-2 p-4 text-left transition-all ${
-											reqSelectedTask === task.id
-												? "border-violet-400 bg-violet-50"
-												: "border-border bg-white hover:border-violet-200 hover:bg-violet-50/50"
-										}`}
+							<div className="relative">
+								<button
+									onClick={() => setReqTaskDropdownOpen(!reqTaskDropdownOpen)}
+									className="flex w-full items-center justify-between rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/10 hover:bg-gray-50 transition-all text-left"
+								>
+									<span className="truncate pr-4">
+										{reqSelectedTask
+											? projectTasks.find((t) => t.id === reqSelectedTask)
+													?.title
+											: "Select a task..."}
+									</span>
+									<svg
+										className={`w-4 h-4 text-muted shrink-0 transition-transform ${reqTaskDropdownOpen ? "rotate-180" : ""}`}
+										fill="none"
+										viewBox="0 0 24 24"
+										strokeWidth={2}
+										stroke="currentColor"
 									>
-										<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-100 text-violet-600">
-											<IoClipboardOutline className="w-4 h-4" />
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+										/>
+									</svg>
+								</button>
+								{reqTaskDropdownOpen && (
+									<>
+										<div
+											className="fixed inset-0 z-30"
+											onClick={() => setReqTaskDropdownOpen(false)}
+										/>
+										<div className="absolute left-0 top-full mt-1 z-40 w-full bg-white rounded-xl border border-border shadow-lg py-1 max-h-[250px] overflow-y-auto no-scrollbar animate-fade-in">
+											{projectTasks.map((task) => (
+												<button
+													key={task.id}
+													onClick={() => {
+														setReqSelectedTask(task.id);
+														setReqTaskDropdownOpen(false);
+													}}
+													className={`flex flex-col w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors ${reqSelectedTask === task.id ? "bg-teal-50 text-teal-800" : ""}`}
+												>
+													<span className="text-sm font-medium truncate w-full">
+														{task.title}
+													</span>
+													<span className="text-[10px] text-muted truncate w-full">
+														{task.projectName}
+													</span>
+												</button>
+											))}
 										</div>
-										<div>
-											<p className="text-sm font-medium text-foreground">
-												{task.title}
-											</p>
-											<p className="text-xs text-muted mt-0.5">
-												{task.projectName}
-											</p>
-										</div>
-									</button>
-								))}
+									</>
+								)}
 							</div>
 							<button
 								onClick={() => setView("req-details")}
 								disabled={!reqSelectedTask}
-								className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-medium text-white hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all mt-2"
+								className="flex w-full items-center justify-center gap-2 rounded-xl bg-teal-600 px-5 py-3 text-sm font-medium text-white hover:bg-teal-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all mt-2"
 							>
 								Next
 							</button>
@@ -631,7 +707,7 @@ export default function SidePanel({
 									onChange={(e) => setReqNotes(e.target.value)}
 									placeholder="E.g.: I would like to get an opinion on the usability of the checkout flow..."
 									rows={3}
-									className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-gray-400 focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-400/10 resize-none"
+									className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-gray-400 focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/10 resize-none"
 								/>
 							</div>
 
@@ -645,7 +721,7 @@ export default function SidePanel({
 										{reqAttachments.map((name) => (
 											<div
 												key={name}
-												className="flex items-center gap-1.5 bg-violet-50 text-violet-700 rounded-lg px-2.5 py-1.5 text-xs font-medium"
+												className="flex items-center gap-1.5 bg-teal-50 text-teal-700 rounded-lg px-2.5 py-1.5 text-xs font-medium"
 											>
 												📎 {name}
 												<button
@@ -654,7 +730,7 @@ export default function SidePanel({
 															reqAttachments.filter((a) => a !== name),
 														)
 													}
-													className="text-violet-400 hover:text-violet-700 ml-0.5"
+													className="text-teal-400 hover:text-teal-700 ml-0.5"
 												>
 													×
 												</button>
@@ -677,7 +753,7 @@ export default function SidePanel({
 											if (available.length > 0)
 												setReqAttachments([...reqAttachments, available[0]]);
 										}}
-										className="flex items-center gap-2 rounded-xl border-2 border-dashed border-border bg-white px-4 py-3 text-sm text-muted hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50/50 transition-all flex-1"
+										className="flex items-center gap-2 rounded-xl border border-dashed border-border bg-white px-4 py-3 text-sm text-muted hover:border-teal-300 hover:text-teal-600 hover:bg-teal-50/50 transition-all flex-1"
 									>
 										<span className="text-lg">📷</span>
 										Images
@@ -695,7 +771,7 @@ export default function SidePanel({
 											if (available.length > 0)
 												setReqAttachments([...reqAttachments, available[0]]);
 										}}
-										className="flex items-center gap-2 rounded-xl border-2 border-dashed border-border bg-white px-4 py-3 text-sm text-muted hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50/50 transition-all flex-1"
+										className="flex items-center gap-2 rounded-xl border border-dashed border-border bg-white px-4 py-3 text-sm text-muted hover:border-teal-300 hover:text-teal-600 hover:bg-teal-50/50 transition-all flex-1"
 									>
 										<span className="text-lg">📄</span>
 										Documents
@@ -710,10 +786,10 @@ export default function SidePanel({
 								</label>
 								<button
 									onClick={() => setReqFigmaLinked(!reqFigmaLinked)}
-									className={`flex w-full items-center gap-3 rounded-xl border-2 p-4 text-left transition-all ${
+									className={`flex w-full items-center gap-3 rounded-xl border p-4 text-left transition-all ${
 										reqFigmaLinked
-											? "border-violet-400 bg-violet-50"
-											: "border-border bg-white hover:border-violet-200"
+											? "border-teal-600 bg-teal-50"
+											: "border-border bg-white hover:border-teal-200 hover:bg-teal-50"
 									}`}
 								>
 									<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#1e1e1e]">
@@ -744,12 +820,12 @@ export default function SidePanel({
 										<p className="text-sm font-medium text-foreground">Figma</p>
 										<p className="text-xs text-muted">
 											{reqFigmaLinked
-												? "Project linked ✓"
+												? "The project has been linked"
 												: "Link a Figma file to the request"}
 										</p>
 									</div>
 									{reqFigmaLinked && (
-										<span className="text-xs font-medium text-violet-600 bg-violet-100 px-2 py-1 rounded-lg">
+										<span className="text-xs font-medium text-teal-50 bg-teal-600 px-2 py-1 rounded-lg">
 											Linked
 										</span>
 									)}
@@ -759,7 +835,7 @@ export default function SidePanel({
 							{/* Send */}
 							<button
 								onClick={handleSendRequest}
-								className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-medium text-white hover:bg-violet-700 transition-all mt-2"
+								className="flex w-full items-center justify-center gap-2 rounded-xl bg-teal-600 px-5 py-3 text-sm font-medium text-white hover:bg-teal-700 transition-all mt-2"
 							>
 								<IoSendOutline className="w-4 h-4" />
 								Send Request
@@ -770,7 +846,7 @@ export default function SidePanel({
 					{/* ═══ REQUEST: Sent confirmation ═══ */}
 					{view === "req-sent" && (
 						<div className="flex flex-col items-center justify-center py-16 animate-scale-in">
-							<div className="flex h-16 w-16 items-center justify-center rounded-full bg-violet-100 text-violet-600 mb-4">
+							<div className="flex h-16 w-16 items-center justify-center rounded-full bg-teal-100 text-teal-600 mb-4">
 								<IoCheckmarkOutline className="w-8 h-8" />
 							</div>
 							<h3 className="text-lg font-semibold text-foreground mb-1">

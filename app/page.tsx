@@ -675,8 +675,8 @@ export default function Home() {
 														}
 														className={`flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg transition-all ${
 															selectedProject.completedByReceiver
-																? "bg-emerald-100 text-emerald-700"
-																: "bg-gray-100 text-gray-600 hover:bg-emerald-50 hover:text-emerald-600"
+																? "bg-lime-100 text-lime-700"
+																: "bg-gray-100 text-gray-600 hover:bg-lime-50 hover:text-lime-600"
 														}`}
 													>
 														<IoCheckmarkOutline className="w-3.5 h-3.5" />
@@ -727,7 +727,7 @@ export default function Home() {
 												<p className="text-xs text-muted">
 													Status:{" "}
 													{selectedProject.completedByReceiver ? (
-														<span className="text-emerald-600 font-medium">
+														<span className="text-lime-600 font-medium">
 															✓ Completed
 															{selectedProject.markedUseful
 																? " · 👍 Useful"
@@ -924,7 +924,7 @@ export default function Home() {
 														{selectedPersonal.strengths &&
 															selectedPersonal.strengths.length > 0 && (
 																<div className="mb-3">
-																	<p className="text-xs font-medium text-emerald-600 mb-2">
+																	<p className="text-xs font-medium text-lime-600 mb-2">
 																		Strengths
 																	</p>
 																	<div className="flex flex-wrap gap-1.5">
@@ -934,7 +934,7 @@ export default function Home() {
 																			return (
 																				<span
 																					key={id}
-																					className="inline-flex items-center gap-1 text-xs bg-emerald-50 text-emerald-700 px-2 py-1 rounded-lg"
+																					className="inline-flex items-center gap-1 text-xs bg-lime-50 text-lime-700 px-2 py-1 rounded-lg"
 																				>
 																					{trait.emoji} {trait.label}
 																				</span>

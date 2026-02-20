@@ -97,7 +97,7 @@ export default function FeedbackStory({
 	if (sent) {
 		return (
 			<div className="flex flex-col items-center justify-center py-16 animate-scale-in">
-				<div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-4">
+				<div className="flex h-16 w-16 items-center justify-center rounded-full bg-lime-100 text-lime-600 mb-4">
 					<IoCheckmarkOutline className="w-8 h-8" />
 				</div>
 				<h3 className="text-lg font-semibold text-foreground mb-1">
@@ -114,7 +114,7 @@ export default function FeedbackStory({
 		<div className="flex flex-col h-full">
 			{/* Target user header */}
 			<div className="flex items-center gap-3 mb-6 pb-4 border-b border-border">
-				<div className="flex h-12 w-12 items-center justify-center rounded-full bg-sky-100 text-sky-800 text-sm font-bold">
+				<div className="flex h-12 w-12 items-center justify-center rounded-full bg-lime-100 text-lime-800 text-sm font-bold">
 					{targetUser.avatar}
 				</div>
 				<div>
@@ -132,9 +132,9 @@ export default function FeedbackStory({
 						key={i}
 						className={`h-1.5 rounded-full transition-all duration-300 ${
 							i === currentStep
-								? "w-8 bg-sky-800"
+								? "w-8 bg-lime-800"
 								: i < currentStep
-									? "w-4 bg-sky-800/40"
+									? "w-4 bg-lime-800/40"
 									: "w-4 bg-gray-200"
 						}`}
 					/>
@@ -147,7 +147,7 @@ export default function FeedbackStory({
 				{currentStep === 0 && (
 					<div>
 						<h3 className="text-base font-semibold text-foreground mb-1">
-							How would you describe {targetUser.name}?
+							How would you describe {targetUser.name}&apos;s attitude?
 						</h3>
 						<p className="text-sm text-muted mb-6">
 							Choose the reaction that best represents your impression
@@ -158,9 +158,9 @@ export default function FeedbackStory({
 								<button
 									key={r.emoji}
 									onClick={() => setSelectedReaction(r.emoji)}
-									className={`flex flex-col items-center gap-2 rounded-2xl border-2 p-4 transition-all hover:border-sky-200 hover:bg-sky-50 ${
+									className={`flex flex-col items-center gap-2 rounded-2xl border p-4 transition-all hover:border-lime-200 hover:bg-lime-50 ${
 										selectedReaction === r.emoji
-											? "border-sky-800 bg-sky-100 shadow-sm"
+											? "border-lime-800 bg-lime-100 shadow-sm"
 											: "border-border bg-white"
 									}`}
 								>
@@ -191,10 +191,10 @@ export default function FeedbackStory({
 									onClick={() =>
 										toggleTrait(t.id, selectedStrengths, setSelectedStrengths)
 									}
-									className={`flex items-center gap-2 rounded-xl border-2 px-3 py-2.5 text-left transition-all ${
+									className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left transition-all ${
 										selectedStrengths.includes(t.id)
-											? "border-emerald-400 bg-emerald-50"
-											: "border-border bg-white hover:border-emerald-200 hover:bg-emerald-50/50"
+											? "border-lime-400 bg-lime-50"
+											: "border-border bg-white hover:border-lime-200 hover:bg-lime-50/50"
 									}`}
 								>
 									<span className="text-lg">{t.emoji}</span>
@@ -223,7 +223,7 @@ export default function FeedbackStory({
 											setSelectedImprovements,
 										)
 									}
-									className={`flex items-center gap-2 rounded-xl border-2 px-3 py-2.5 text-left transition-all ${
+									className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left transition-all ${
 										selectedImprovements.includes(t.id)
 											? "border-amber-400 bg-amber-50"
 											: "border-border bg-white hover:border-amber-200 hover:bg-amber-50/50"
@@ -258,7 +258,7 @@ export default function FeedbackStory({
 										return t ? (
 											<span
 												key={id}
-												className="inline-flex items-center gap-1 text-xs font-medium bg-emerald-50 text-emerald-700 px-2 py-1 rounded-lg border border-emerald-200"
+												className="inline-flex items-center gap-1 text-xs font-medium bg-lime-50 text-lime-700 px-2 py-1 rounded-lg border border-lime-200"
 											>
 												{t.emoji} {t.label}
 											</span>
@@ -288,7 +288,7 @@ export default function FeedbackStory({
 							onChange={(e) => setMessage(e.target.value)}
 							placeholder="E.g.: I noticed that during standups they always communicate clearly and concisely..."
 							rows={4}
-							className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-gray-400 focus:border-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-800/10 resize-none"
+							className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-gray-400 focus:border-lime-800 focus:outline-none focus:ring-2 focus:ring-lime-800/10 resize-none"
 						/>
 						<p className="text-[11px] text-muted mt-2">
 							{message.length}/300 characters
@@ -312,7 +312,7 @@ export default function FeedbackStory({
 					<button
 						onClick={() => setCurrentStep(currentStep + 1)}
 						disabled={!canProceed()}
-						className="flex items-center gap-2 rounded-xl bg-sky-800 px-5 py-2.5 text-sm font-medium text-white hover:bg-sky-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+						className="flex items-center gap-2 rounded-xl bg-lime-800 px-5 py-2.5 text-sm font-medium text-white hover:bg-lime-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
 					>
 						Next
 					</button>
@@ -320,7 +320,7 @@ export default function FeedbackStory({
 					<button
 						onClick={handleSend}
 						disabled={!canProceed()}
-						className="flex items-center gap-2 rounded-xl bg-sky-800 px-5 py-2.5 text-sm font-medium text-white hover:bg-sky-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+						className="flex items-center gap-2 rounded-xl bg-lime-800 px-5 py-2.5 text-sm font-medium text-white hover:bg-lime-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
 					>
 						<IoSendOutline className="w-4 h-4" />
 						Send Feedback
