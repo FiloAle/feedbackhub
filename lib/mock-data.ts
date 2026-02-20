@@ -1,4 +1,11 @@
-import { User, PersonalFeedback, ProjectTask, WeeklyRecap } from "./types";
+import {
+	User,
+	PersonalFeedback,
+	ProjectTask,
+	WeeklyRecap,
+	CompanyEvent,
+	EventFeedback,
+} from "./types";
 
 // ─── Users ───────────────────────────────────────────────────────────────────
 
@@ -314,6 +321,75 @@ export const projectTasks: ProjectTask[] = [
 		dueDate: "2026-03-01",
 		receivedDate: "2026-02-19T08:30:00",
 		comments: [],
+	},
+];
+
+// ─── Events ───────────────────────────────────────────────────────────────────
+
+export const mockEvents: CompanyEvent[] = [
+	{
+		id: "evt1",
+		title: "Q1 Pitch Deck Presentation",
+		date: "2026-02-18T10:00:00",
+		description: "Company-wide presentation of the new Q1 Pitch Deck.",
+		projectTag: "Internal",
+	},
+	{
+		id: "evt2",
+		title: "February Monthly Sync",
+		date: "2026-02-15T15:00:00",
+		description: "Monthly sync for all departments to align on goals.",
+		projectTag: "MedioBanca Website",
+	},
+	{
+		id: "evt3",
+		title: "Product All Hands",
+		date: "2026-02-10T11:00:00",
+		description: "All Hands meeting focused on the Q2 Product Roadmap.",
+		projectTag: "AXA Mobile App",
+	},
+];
+
+export const mockEventFeedbacks: EventFeedback[] = [
+	{
+		id: "ef1",
+		eventId: "evt1",
+		authorId: "u2",
+		useful: true,
+		notes: "Great presentation, the slides were very clear.",
+		date: "2026-02-18T11:30:00",
+	},
+	{
+		id: "ef2",
+		eventId: "evt1",
+		authorId: "u3",
+		useful: true,
+		notes: "",
+		date: "2026-02-18T12:00:00",
+	},
+	{
+		id: "ef3",
+		eventId: "evt2",
+		authorId: "u5",
+		useful: false,
+		notes: "A bit too long, maybe we can condense the marketing part.",
+		date: "2026-02-15T16:15:00",
+	},
+	{
+		id: "ef4",
+		eventId: "evt2",
+		authorId: "u1",
+		useful: true,
+		notes: "Good alignment overall.",
+		date: "2026-02-15T16:30:00",
+	},
+	{
+		id: "ef5",
+		eventId: "evt3",
+		authorId: "u4",
+		useful: true,
+		notes: "Excited for the new roadmap!",
+		date: "2026-02-10T12:00:00",
 	},
 ];
 

@@ -9,9 +9,10 @@ import {
 	IoSendOutline,
 	IoSparklesOutline,
 	IoCheckmarkOutline,
+	IoCalendarOutline,
 } from "react-icons/io5";
 import FeedbackStory from "@/components/feedback/FeedbackStory";
-import { users, currentUser, projectTasks } from "@/lib/mock-data";
+import { users, currentUser, projectTasks, mockEvents } from "@/lib/mock-data";
 import { User } from "@/lib/types";
 
 interface SidePanelProps {
@@ -34,7 +35,8 @@ type PanelView =
 	| "req-personal-area"
 	| "req-project-task"
 	| "req-details"
-	| "req-sent";
+	| "req-sent"
+	| "event";
 
 const aiSuggestions: Record<string, string> = {
 	vague:
@@ -114,6 +116,14 @@ export default function SidePanel({
 	const [sendTaskDropdownOpen, setSendTaskDropdownOpen] = useState(false);
 	const [reqTaskDropdownOpen, setReqTaskDropdownOpen] = useState(false);
 
+	// Event Feedback state
+	const [eventSelectedId, setEventSelectedId] = useState(
+		mockEvents[0]?.id || "",
+	);
+	const [eventUseful, setEventUseful] = useState<boolean | null>(null);
+	const [eventNotes, setEventNotes] = useState("");
+	const [sendEventDropdownOpen, setSendEventDropdownOpen] = useState(false);
+
 	const feedbackTarget = lockedTarget || selectedPerson;
 	const aiHint = analyzeComment(projectComment);
 
@@ -130,6 +140,9 @@ export default function SidePanel({
 		setReqFigmaLinked(false);
 		setSendTaskDropdownOpen(false);
 		setReqTaskDropdownOpen(false);
+		setSendEventDropdownOpen(false);
+		setEventUseful(null);
+		setEventNotes("");
 	};
 
 	const handleClose = () => {
@@ -198,6 +211,11 @@ export default function SidePanel({
 		setTimeout(() => handleClose(), 1500);
 	};
 
+	const handleSendEventFeedback = () => {
+		setCommentSent(true);
+		setTimeout(() => handleClose(), 1500);
+	};
+
 	const handleSendRequest = () => {
 		setView("req-sent");
 		setTimeout(() => handleClose(), 1500);
@@ -218,6 +236,8 @@ export default function SidePanel({
 				return "Personal Feedback";
 			case "project":
 				return "Project Feedback";
+			case "event":
+				return "Event Feedback";
 			case "req-type":
 				return "Request Feedback";
 			case "req-pick-person":
@@ -311,6 +331,25 @@ export default function SidePanel({
 									</p>
 								</div>
 							</button>
+							{mode === "send" && (
+								<button
+									onClick={() => setView("event")}
+									className="flex w-full items-center gap-4 rounded-2xl border border-border bg-white p-5 text-left hover:border-lime-200 hover:bg-lime-50/50 transition-all group animate-fade-in-up"
+									style={{ animationDelay: "100ms" }}
+								>
+									<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-lime-100 text-lime-800 group-hover:bg-lime-800 group-hover:text-white transition-colors">
+										<IoCalendarOutline className="w-6 h-6" />
+									</div>
+									<div>
+										<p className="text-sm font-semibold text-foreground">
+											Event Feedback
+										</p>
+										<p className="text-xs text-muted mt-0.5">
+											Evaluate recent company events or syncs
+										</p>
+									</div>
+								</button>
+							)}
 						</div>
 					)}
 
@@ -456,12 +495,12 @@ export default function SidePanel({
 								/>
 							</div>
 							{aiHint && (
-								<div className="flex gap-3 rounded-xl bg-gradient-to-r from-lime-50 to-indigo-50 border border-lime-200 p-4 animate-fade-in-up">
-									<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-lime-800/10 text-lime-800">
+								<div className="flex gap-3 rounded-xl bg-gradient-to-r from-sky-50 to-indigo-50 border border-sky-100 p-4 animate-fade-in-up">
+									<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-sky-800/10 text-sky-800">
 										<IoSparklesOutline className="w-5 h-5 animate-scale-in" />
 									</div>
 									<div>
-										<p className="text-xs font-semibold text-lime-800 mb-1">
+										<p className="text-xs font-semibold text-sky-800 mb-1">
 											AI Suggestion
 										</p>
 										<p className="text-sm text-foreground/80 leading-relaxed">
@@ -492,6 +531,141 @@ export default function SidePanel({
 							</h3>
 							<p className="text-sm text-muted">
 								Your feedback has been added to the task
+							</p>
+						</div>
+					)}
+
+					{/* ═══ SEND: Event feedback ═══ */}
+					{view === "event" && !commentSent && (
+						<div className="space-y-5 animate-fade-in-up">
+							<div>
+								<label className="text-sm font-medium text-foreground mb-1.5 block">
+									Event
+								</label>
+								<div className="relative">
+									<button
+										onClick={() =>
+											setSendEventDropdownOpen(!sendEventDropdownOpen)
+										}
+										className="flex w-full items-center justify-between rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground focus:border-lime-800 focus:outline-none focus:ring-2 focus:ring-lime-800/10 hover:bg-gray-50 transition-all text-left"
+									>
+										<span className="truncate pr-4">
+											{mockEvents.find((evt) => evt.id === eventSelectedId)
+												?.title || "Select an event..."}
+										</span>
+										<svg
+											className={`w-4 h-4 text-muted shrink-0 transition-transform ${sendEventDropdownOpen ? "rotate-180" : ""}`}
+											fill="none"
+											viewBox="0 0 24 24"
+											strokeWidth={2}
+											stroke="currentColor"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+											/>
+										</svg>
+									</button>
+									{sendEventDropdownOpen && (
+										<>
+											<div
+												className="fixed inset-0 z-30"
+												onClick={() => setSendEventDropdownOpen(false)}
+											/>
+											<div className="absolute left-0 top-full mt-1 z-40 w-full bg-white rounded-xl border border-border shadow-lg py-1 max-h-[250px] overflow-y-auto no-scrollbar animate-fade-in">
+												{mockEvents.map((evt) => (
+													<button
+														key={evt.id}
+														onClick={() => {
+															setEventSelectedId(evt.id);
+															setSendEventDropdownOpen(false);
+														}}
+														className={`flex flex-col w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors ${eventSelectedId === evt.id ? "bg-lime-50 text-lime-800" : ""}`}
+													>
+														<span className="text-sm font-medium truncate w-full">
+															{evt.title}
+														</span>
+														<span className="text-[10px] text-muted truncate w-full">
+															{new Date(evt.date).toLocaleDateString("en-US", {
+																month: "short",
+																day: "numeric",
+															})}
+														</span>
+													</button>
+												))}
+											</div>
+										</>
+									)}
+								</div>
+							</div>
+
+							<div>
+								<label className="text-sm font-medium text-foreground mb-3 block">
+									Was this event useful to you?
+								</label>
+								<div className="grid grid-cols-2 gap-3">
+									<button
+										onClick={() => setEventUseful(true)}
+										className={`flex items-center justify-center gap-2 rounded-xl border-2 py-3 transition-all ${
+											eventUseful === true
+												? "border-lime-500 bg-lime-50 text-lime-800"
+												: "border-border bg-white text-muted hover:border-lime-200 hover:bg-lime-50"
+										}`}
+									>
+										<span className="text-xl">👍</span>
+										<span className="text-sm font-medium">Useful</span>
+									</button>
+									<button
+										onClick={() => setEventUseful(false)}
+										className={`flex items-center justify-center gap-2 rounded-xl border-2 py-3 transition-all ${
+											eventUseful === false
+												? "border-amber-500 bg-amber-50 text-amber-800"
+												: "border-border bg-white text-muted hover:border-amber-200 hover:bg-amber-50"
+										}`}
+									>
+										<span className="text-xl">👎</span>
+										<span className="text-sm font-medium">Not Useful</span>
+									</button>
+								</div>
+							</div>
+
+							<div>
+								<label className="text-sm font-medium text-foreground mb-1.5 block">
+									Additional notes{" "}
+									<span className="text-muted font-normal">(optional)</span>
+								</label>
+								<textarea
+									value={eventNotes}
+									onChange={(e) => setEventNotes(e.target.value)}
+									placeholder="Any personal thoughts on what could be improved?"
+									rows={4}
+									className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-gray-400 focus:border-lime-800 focus:outline-none focus:ring-2 focus:ring-lime-800/10 resize-none"
+								/>
+							</div>
+
+							<button
+								onClick={handleSendEventFeedback}
+								disabled={eventUseful === null}
+								className="flex w-full items-center justify-center gap-2 rounded-xl bg-lime-800 px-5 py-3 text-sm font-medium text-white hover:bg-lime-900 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+							>
+								<IoSendOutline className="w-4 h-4" />
+								Send Feedback
+							</button>
+						</div>
+					)}
+
+					{/* ═══ SEND: Event sent confirmation ═══ */}
+					{view === "event" && commentSent && (
+						<div className="flex flex-col items-center justify-center py-16 animate-scale-in">
+							<div className="flex h-16 w-16 items-center justify-center rounded-full bg-lime-100 text-lime-600 mb-4">
+								<IoCheckmarkOutline className="w-8 h-8" />
+							</div>
+							<h3 className="text-lg font-semibold text-foreground mb-1">
+								Feedback Sent!
+							</h3>
+							<p className="text-sm text-muted">
+								Thank you, your feedback helps us improve company events
 							</p>
 						</div>
 					)}

@@ -19,6 +19,8 @@ import {
 	personalFeedbacks,
 	projectTasks as initialTasks,
 	weeklyRecap,
+	mockEvents,
+	mockEventFeedbacks,
 } from "@/lib/mock-data";
 import { getStatusColor, getStatusLabel, formatDate } from "@/lib/utils";
 import { User, PersonalFeedback, ProjectTask, TaskStatus } from "@/lib/types";
@@ -105,6 +107,12 @@ export default function Home() {
 	const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
 	const [ignoreConfirmId, setIgnoreConfirmId] = useState<string | null>(null);
 	const [wrappedOpen, setWrappedOpen] = useState(false);
+
+	const [selectedEventId, setSelectedEventId] = useState<string | null>(
+		mockEvents[0]?.id || null,
+	);
+	const [eventFeedbacksState, setEventFeedbacksState] =
+		useState(mockEventFeedbacks);
 
 	// ─── Computed ─────────────────────────────────────────────────────────
 	const receivedPersonal = useMemo(
@@ -244,18 +252,45 @@ export default function Home() {
 		return sortAsc ? da - db : db - da;
 	});
 
+	const currentPersonalList = useMemo(() => {
+		let list = subTab === "received" ? receivedPersonal : sentPersonal;
+		if (sortAsc) {
+			list = [...list].sort(
+				(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+			);
+		}
+		return list;
+	}, [receivedPersonal, sentPersonal, subTab, sortAsc]);
+
+	const currentEventList = useMemo(() => {
+		let list = [...mockEvents];
+		if (projectFilter) {
+			list = list.filter((e) => e.projectTag === projectFilter);
+		}
+		list = list.sort((a, b) => {
+			const da = new Date(a.date).getTime();
+			const db = new Date(b.date).getTime();
+			return sortAsc ? da - db : db - da;
+		});
+		return list;
+	}, [projectFilter, sortAsc]);
+
 	// Unique project names for filter
 	const projectNames = useMemo(
 		() => [...new Set(tasks.map((t) => t.projectName))].sort(),
 		[tasks],
 	);
-	const currentPersonalList = (
-		subTab === "received" ? receivedPersonal : sentPersonal
-	).sort((a, b) => {
-		const da = new Date(a.date).getTime();
-		const db = new Date(b.date).getTime();
-		return sortAsc ? da - db : db - da;
-	});
+	const uniqueProjects = useMemo(() => {
+		const projects = [...projectNames];
+
+		// Ensure "Internal" is always at the top of the specific project tags list
+		const internalIndex = projects.indexOf("Internal");
+		if (internalIndex > -1) {
+			projects.splice(internalIndex, 1);
+		}
+		projects.unshift("Internal");
+		return projects;
+	}, [projectNames]);
 
 	const handleWeeklyReminderOpen = () => {
 		setPanelLockedTarget(null);
@@ -757,17 +792,262 @@ export default function Home() {
 
 					{/* ═══════ EVENTI TAB ═══════ */}
 					{mainTab === "events" && (
-						<div className="lg:col-span-5 flex items-center justify-center rounded-2xl border border-dashed border-border bg-gray-50 min-h-[300px]">
-							<div className="text-center">
-								<p className="text-3xl mb-2">📅</p>
-								<p className="text-sm font-medium text-foreground mb-1">
-									Coming soon
-								</p>
-								<p className="text-xs text-muted">
-									The events section will be available soon
-								</p>
+						<>
+							{/* List */}
+							<div className="lg:col-span-2 flex flex-col min-h-0">
+								{/* Filters Bar */}
+								<div className="flex items-center gap-2 mb-3">
+									<div className="relative">
+										<button
+											onClick={() => setDropdownOpen(!dropdownOpen)}
+											className="flex items-center gap-2 text-xs font-medium rounded-lg border border-border bg-white px-3 py-1.5 text-foreground hover:bg-gray-50 transition-all"
+										>
+											<span>
+												{projectFilter === null
+													? "All projects"
+													: projectFilter}
+											</span>
+											<svg
+												className={`w-3 h-3 text-muted transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
+												fill="none"
+												viewBox="0 0 24 24"
+												strokeWidth={2}
+												stroke="currentColor"
+											>
+												<path
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+												/>
+											</svg>
+										</button>
+										{dropdownOpen && (
+											<>
+												<div
+													className="fixed inset-0 z-30"
+													onClick={() => setDropdownOpen(false)}
+												/>
+												<div className="absolute left-0 top-full mt-1 z-40 bg-white rounded-xl border border-border shadow-lg py-1 min-w-[200px] animate-fade-in">
+													<button
+														onClick={() => {
+															setProjectFilter(null);
+															setDropdownOpen(false);
+														}}
+														className={`w-full text-left px-4 py-2 text-xs transition-colors ${projectFilter === null ? "bg-sky-100 text-sky-800 font-medium" : "text-foreground hover:bg-gray-50"}`}
+													>
+														All projects
+													</button>
+													{uniqueProjects.map((name) => (
+														<button
+															key={name}
+															onClick={() => {
+																setProjectFilter(name);
+																setDropdownOpen(false);
+															}}
+															className={`w-full text-left px-4 py-2 text-xs transition-colors ${projectFilter === name ? "bg-sky-100 text-sky-800 font-medium" : "text-foreground hover:bg-gray-50"}`}
+														>
+															{name}
+														</button>
+													))}
+												</div>
+											</>
+										)}
+									</div>
+									{/* Sort toggle */}
+									<button
+										onClick={() => setSortAsc(!sortAsc)}
+										className="ml-auto text-xs font-medium px-3 py-1.5 rounded-lg border border-border bg-white text-muted hover:text-foreground hover:bg-gray-50 transition-all"
+									>
+										{sortAsc ? "↑ Oldest" : "↓ Newest"}
+									</button>
+								</div>
+
+								{/* Event List */}
+								<div className="space-y-2 overflow-y-auto no-scrollbar max-h-[60vh] pr-1">
+									{currentEventList.length > 0 ? (
+										currentEventList.map((evt) => {
+											const isSelected = selectedEventId === evt.id;
+											const evtFb = eventFeedbacksState.filter(
+												(f) => f.eventId === evt.id,
+											);
+											return (
+												<div
+													key={evt.id}
+													onClick={() => setSelectedEventId(evt.id)}
+													className={`rounded-xl border p-3.5 cursor-pointer transition-all ${
+														isSelected
+															? "border-sky-800 bg-sky-100/50"
+															: "border-border bg-white hover:border-sky-200"
+													}`}
+												>
+													<div className="flex items-start gap-3">
+														<div
+															className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sky-100 text-muted`}
+														>
+															<span className="text-sm">📅</span>
+														</div>
+														<div className="flex-1 min-w-0 pr-4">
+															<div className="flex items-center gap-1.5 mb-1">
+																{!projectFilter && evt.projectTag && (
+																	<span className="text-[10px] font-medium px-2 py-0.5 rounded-full border border-slate-200 text-slate-600 truncate max-w-[100px]">
+																		{evt.projectTag}
+																	</span>
+																)}
+															</div>
+															<p className="text-sm font-medium text-foreground truncate">
+																{evt.title}
+															</p>
+															<p className="text-xs text-muted truncate mt-0.5">
+																{evtFb.length} Feedback
+																{evtFb.length !== 1 && "s"}
+															</p>
+														</div>
+														<span className="text-[10px] text-muted shrink-0 pt-0.5">
+															{formatDate(evt.date)}
+														</span>
+													</div>
+												</div>
+											);
+										})
+									) : (
+										<p className="text-sm text-muted text-center py-12">
+											No events.
+										</p>
+									)}
+								</div>
 							</div>
-						</div>
+
+							{/* Detail */}
+							<div className="lg:col-span-3 rounded-2xl border border-border bg-white p-6 overflow-y-auto no-scrollbar max-h-[60vh]">
+								{selectedEventId ? (
+									(() => {
+										const evt = mockEvents.find(
+											(e) => e.id === selectedEventId,
+										);
+										if (!evt) return null;
+
+										const evtFb = eventFeedbacksState.filter(
+											(f) => f.eventId === evt.id,
+										);
+										const usefulCount = evtFb.filter((f) => f.useful).length;
+										const usefulPercent =
+											evtFb.length > 0
+												? Math.round((usefulCount / evtFb.length) * 100)
+												: 0;
+
+										return (
+											<div className="animate-fade-in">
+												{/* Header */}
+												<div className="mb-6 flex items-start justify-between">
+													<div className="flex items-center gap-4">
+														<div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-sky-100 text-sky-800 text-2xl">
+															📅
+														</div>
+														<div>
+															<h2 className="text-xl font-bold text-foreground">
+																{evt.title}
+															</h2>
+															<p className="text-sm text-muted mt-1">
+																{evt.description}
+															</p>
+														</div>
+													</div>
+												</div>
+
+												{/* Stats */}
+												<div className="mb-8 grid grid-cols-2 gap-4">
+													<div className="rounded-2xl border border-border bg-gray-50/50 p-4">
+														<p className="text-sm text-muted mb-1 font-medium">
+															Total Feedback
+														</p>
+														<p className="text-2xl font-bold text-foreground">
+															{evtFb.length}
+														</p>
+													</div>
+													<div className="rounded-2xl border border-border bg-sky-50/50 p-4">
+														<p className="text-sm text-muted mb-1 font-medium text-sky-800">
+															Useful Rating
+														</p>
+														<div className="flex items-baseline gap-2">
+															<p className="text-2xl font-bold text-sky-700">
+																{evtFb.length > 0 ? `${usefulPercent}%` : "—"}
+															</p>
+															{evtFb.length > 0 && (
+																<span className="text-xs font-medium text-sky-600/80">
+																	({usefulCount} useful)
+																</span>
+															)}
+														</div>
+													</div>
+												</div>
+
+												{/* Notes List */}
+												<div>
+													<h3 className="text-sm font-semibold text-foreground mb-4">
+														Additional Notes
+													</h3>
+													{evtFb.filter((f) => f.notes.trim().length > 0)
+														.length > 0 ? (
+														<div className="space-y-3">
+															{evtFb
+																.filter((f) => f.notes.trim().length > 0)
+																.map((fb) => {
+																	const author = users.find(
+																		(u) => u.id === fb.authorId,
+																	);
+																	return (
+																		<div
+																			key={fb.id}
+																			className="rounded-2xl border border-border bg-white p-4 animate-fade-in-up"
+																		>
+																			<div className="flex items-center gap-3 mb-2">
+																				<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-100 text-xs font-bold text-muted">
+																					{author?.avatar || "?"}
+																				</div>
+																				<div>
+																					<p className="text-sm font-medium text-foreground">
+																						{author?.name || "Unknown"}
+																					</p>
+																					<p className="text-[10px] text-muted">
+																						{formatDate(fb.date)}
+																					</p>
+																				</div>
+																				{fb.useful ? (
+																					<span className="ml-auto inline-flex items-center gap-1 text-xs font-medium bg-sky-50 text-sky-700 px-2 py-1 rounded-lg">
+																						👍 Useful
+																					</span>
+																				) : (
+																					<span className="ml-auto inline-flex items-center gap-1 text-xs font-medium bg-amber-50 text-amber-700 px-2 py-1 rounded-lg">
+																						👎 Not Useful
+																					</span>
+																				)}
+																			</div>
+																			<p className="text-sm text-muted pl-11">
+																				{fb.notes}
+																			</p>
+																		</div>
+																	);
+																})}
+														</div>
+													) : (
+														<div className="flex flex-col items-center justify-center py-8 text-center text-muted bg-gray-50/50 rounded-2xl border border-dashed border-border">
+															<span className="text-2xl mb-2">📝</span>
+															<p className="text-sm">
+																No notes left for this event.
+															</p>
+														</div>
+													)}
+												</div>
+											</div>
+										);
+									})()
+								) : (
+									<div className="flex flex-1 items-center justify-center h-full text-sm text-muted">
+										Select an event to see its details
+									</div>
+								)}
+							</div>
+						</>
 					)}
 
 					{/* ═══════ PERSONALI TAB ═══════ */}

@@ -80,6 +80,25 @@ export interface StoryStep {
 	subtitle: string;
 }
 
+// ─── Events ───────────────────────────────────────────────────────────────────
+
+export interface CompanyEvent {
+	id: string;
+	title: string;
+	date: string;
+	description: string;
+	projectTag?: string; // e.g. "MedioBanca Website", "Internal", etc.
+}
+
+export interface EventFeedback {
+	id: string;
+	eventId: string;
+	authorId: string;
+	useful: boolean;
+	notes: string;
+	date: string;
+}
+
 // ─── Weekly Recap ────────────────────────────────────────────────────────────
 
 export interface WeeklyRecap {
